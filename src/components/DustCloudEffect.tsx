@@ -168,3 +168,4 @@ export function DustCloudEffect({ scrollProgress = 0 }: DustCloudEffectProps) {
     </div>
   );
 }
+

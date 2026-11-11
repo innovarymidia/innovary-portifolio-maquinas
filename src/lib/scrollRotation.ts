@@ -16,3 +16,4 @@ export function computeScrollRotationDeg(
   const progress = Math.min(1, Math.max(0, scrollY / rotationDistancePx));
   return Math.round(progress * 360 * 100) / 100;
 }
+
