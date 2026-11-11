@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-industrial-yellow: #F3B51B;
+  --color-industrial-yellow-hover: #E0A310;
+  --color-graphite: #25272B;
+  --color-light-surface: #F2F3F5;
+  --color-pure-white: #FFFFFF;
+  --color-medium-gray: #D6D9DE;
+  --color-muted-text: #656B73;
+
+  --font-display: "Barlow Condensed", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-graphite);
+    background-color: var(--color-light-surface);
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* Sutil animacao de entrada respeitando prefers-reduced-motion */
+@keyframes fadeUpSubtle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUpSubtle 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-fade-up {
+    animation: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
