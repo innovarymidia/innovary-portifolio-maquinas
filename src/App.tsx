@@ -4,6 +4,7 @@ import { type CategoryId, type EquipmentItem } from './config/catalog';
 import { initAnalytics } from './lib/analytics';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { HeroV2 } from './components/HeroV2';
 import { CategoriesSection } from './components/CategoriesSection';
 import { DifferentialsSection } from './components/DifferentialsSection';
 import { ProcessSection } from './components/ProcessSection';
@@ -16,6 +17,11 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 export function App() {
   const [activeCategory, setActiveCategory] = useState<CategoryId | 'all'>('all');
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string>('');
+
+  const isLegacyV1 =
+    typeof window !== 'undefined' &&
+    (new URLSearchParams(window.location.search).get('v') === '1' ||
+      window.location.pathname === '/v1');
 
   useEffect(() => {
     initAnalytics(analyticsConfig);
@@ -37,7 +43,7 @@ export function App() {
       <Header />
 
       <main id="conteudo-principal" className="flex-1">
-        <Hero />
+        {isLegacyV1 ? <Hero /> : <HeroV2 />}
         <CategoriesSection onSelectCategory={setActiveCategory} />
         <DifferentialsSection />
         <ProcessSection />

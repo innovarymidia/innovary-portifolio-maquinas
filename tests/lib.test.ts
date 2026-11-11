@@ -7,6 +7,7 @@ import {
 } from '../src/lib/phone.ts';
 import { buildQuoteMessage, buildWhatsAppUrl } from '../src/lib/quote.ts';
 import { validateAnalyticsIds } from '../src/lib/analytics.ts';
+import { computeScrollRotationDeg } from '../src/lib/scrollRotation.ts';
 
 describe('phone mask and validation', () => {
   it('extracts up to 11 digits cleanly', () => {
@@ -77,6 +78,18 @@ describe('analytics ID validation', () => {
       gtmId: null,
       metaPixelId: null,
     });
+  });
+});
+
+describe('hero excavator 360 scroll rotation', () => {
+  it('maps vertical scroll smoothly from 0 to 360 degrees and clamps boundaries', () => {
+    assert.equal(computeScrollRotationDeg(-40, 500), 0);
+    assert.equal(computeScrollRotationDeg(0, 500), 0);
+    assert.equal(computeScrollRotationDeg(125, 500), 90);
+    assert.equal(computeScrollRotationDeg(250, 500), 180);
+    assert.equal(computeScrollRotationDeg(375, 500), 270);
+    assert.equal(computeScrollRotationDeg(500, 500), 360);
+    assert.equal(computeScrollRotationDeg(900, 500), 360);
   });
 });
 
