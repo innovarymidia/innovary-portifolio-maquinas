@@ -1,8 +1,9 @@
 import { Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
-import { equipmentCategories, type CategoryId } from '../config/catalog';
+import { categoryLibrary, type CategoryId } from '../config/catalog';
 import { companyConfig } from '../config/company';
-import { buildWhatsAppUrl } from '../lib/quote';
+import { templateConfig } from '../config/template';
 import { trackEvent } from '../lib/analytics';
+import { buildWhatsAppUrl } from '../lib/quote';
 import { BrandLogo } from './BrandLogo';
 
 interface FooterProps {
@@ -11,6 +12,9 @@ interface FooterProps {
 
 export function Footer({ onSelectCategory }: FooterProps) {
   const year = new Date().getFullYear();
+  const visibleCategories = categoryLibrary.filter((cat) =>
+    templateConfig.enabledCategoryIds.includes(cat.id)
+  );
   const whatsAppUrl = buildWhatsAppUrl(
     companyConfig.contact.whatsappDigits,
     companyConfig.contact.whatsappDefaultMessage
@@ -18,9 +22,9 @@ export function Footer({ onSelectCategory }: FooterProps) {
 
   const handleCategoryClick = (categoryId: CategoryId) => {
     onSelectCategory(categoryId);
-    const fleetEl = document.getElementById('frota');
-    if (fleetEl) {
-      fleetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const catalogEl = document.getElementById('catalogo');
+    if (catalogEl) {
+      catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -62,7 +66,7 @@ export function Footer({ onSelectCategory }: FooterProps) {
               Categorias
             </h3>
             <ul className="mt-3 space-y-2 text-sm text-[#D6D9DE]">
-              {equipmentCategories.map((cat) => (
+              {visibleCategories.slice(0, 6).map((cat) => (
                 <li key={cat.id}>
                   <button
                     type="button"
@@ -130,4 +134,3 @@ export function Footer({ onSelectCategory }: FooterProps) {
     </footer>
   );
 }
-

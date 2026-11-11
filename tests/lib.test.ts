@@ -7,6 +7,7 @@ import {
 } from '../src/lib/phone.ts';
 import { buildQuoteMessage, buildWhatsAppUrl } from '../src/lib/quote.ts';
 import { validateAnalyticsIds } from '../src/lib/analytics.ts';
+import { filterCatalogEquipments } from '../src/lib/catalogFilter.ts';
 
 describe('phone mask and validation', () => {
   it('extracts up to 11 digits cleanly', () => {
@@ -29,19 +30,20 @@ describe('phone mask and validation', () => {
 });
 
 describe('quote message and WhatsApp URL builder', () => {
-  it('includes equipment label, code, and request fields in quote message', () => {
+  it('includes equipment label, brand, code, and request fields in quote message', () => {
     const msg = buildQuoteMessage({
-      equipmentLabel: 'Escavadeira Hidráulica 20t',
-      equipmentCode: 'ESC-20T',
-      period: 'Mensal (30 dias)',
+      equipmentLabel: 'Betoneira 400 Litros Prime',
+      equipmentCode: 'CON-400M',
+      brand: 'Menegotti',
+      period: 'Mensal',
       city: 'Campinas - SP',
       requesterName: 'Eng. Carlos',
       phone: '(19) 99888-7766',
-      notes: 'Obra de galpão logístico',
+      notes: 'Obra residencial',
     });
 
-    assert.match(msg, /Escavadeira Hidráulica 20t \(Ref\.: ESC-20T\)/);
-    assert.match(msg, /Mensal \(30 dias\)/);
+    assert.match(msg, /Betoneira 400 Litros Prime \(Menegotti • Ref\.: CON-400M\)/);
+    assert.match(msg, /Periodo de locacao: Mensal/);
     assert.match(msg, /Campinas - SP/);
     assert.match(msg, /Eng\. Carlos/);
     assert.match(msg, /\(19\) 99888-7766/);
@@ -51,6 +53,87 @@ describe('quote message and WhatsApp URL builder', () => {
     const url = buildWhatsAppUrl('(11) 98765-4321', 'Ola equipamento');
     assert.equal(url, 'https://wa.me/5511987654321?text=Ola%20equipamento');
     assert.equal(buildWhatsAppUrl('123', 'test'), '#orcamento');
+  });
+});
+
+describe('modular catalog filtering and search', () => {
+  const sample = [
+    {
+      id: 'b1',
+      code: 'CON-400M',
+      name: 'Betoneira 400 Litros Prime',
+      categoryId: 'concreto' as const,
+      brand: 'Menegotti',
+      model: 'Conforme equipamento',
+      specification: 'Capacidade de 400 L',
+      billingUnit: 'Diária',
+      availability: 'Sob consulta',
+      image: '',
+      imageAlt: '',
+    },
+    {
+      id: 'd1',
+      code: 'DEM-1600D',
+      name: 'Martelo Demolidor 1600W',
+      categoryId: 'demolicao' as const,
+      brand: 'DeWalt',
+      model: 'Conforme equipamento',
+      specification: '35 J',
+      billingUnit: 'Diária',
+      availability: 'Sob consulta',
+      image: '',
+      imageAlt: '',
+    },
+    {
+      id: 'c1',
+      code: 'CNT-600M',
+      name: 'Container Modular',
+      categoryId: 'containers' as const,
+      brand: 'Modular',
+      model: 'Conforme equipamento',
+      specification: '6 metros',
+      billingUnit: 'Mensal',
+      availability: 'Sob consulta',
+      image: '',
+      imageAlt: '',
+    },
+  ];
+
+  it('excludes categories disabled by client template config', () => {
+    const res = filterCatalogEquipments({
+      items: sample,
+      enabledCategoryIds: ['concreto', 'demolicao'],
+      activeCategory: 'all',
+      searchQuery: '',
+    });
+    assert.deepEqual(
+      res.map((r) => r.id),
+      ['b1', 'd1']
+    );
+  });
+
+  it('filters by category and matches search across name, brand, specification, and code', () => {
+    const bySearch = filterCatalogEquipments({
+      items: sample,
+      enabledCategoryIds: ['concreto', 'demolicao', 'containers'],
+      activeCategory: 'all',
+      searchQuery: 'menegotti',
+    });
+    assert.deepEqual(
+      bySearch.map((r) => r.id),
+      ['b1']
+    );
+
+    const byCatAndCode = filterCatalogEquipments({
+      items: sample,
+      enabledCategoryIds: ['concreto', 'demolicao'],
+      activeCategory: 'demolicao',
+      searchQuery: '1600d',
+    });
+    assert.deepEqual(
+      byCatAndCode.map((r) => r.id),
+      ['d1']
+    );
   });
 });
 
@@ -79,4 +162,3 @@ describe('analytics ID validation', () => {
     });
   });
 });
-

@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import { analyticsConfig } from './config/analytics';
 import { type CategoryId, type EquipmentItem } from './config/catalog';
+import { templateConfig } from './config/template';
 import { initAnalytics } from './lib/analytics';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
+import { BrandsSection } from './components/BrandsSection';
+import { CatalogSection } from './components/CatalogSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { DifferentialsSection } from './components/DifferentialsSection';
-import { ProcessSection } from './components/ProcessSection';
-import { FleetSection } from './components/FleetSection';
-import { CoverageSection } from './components/CoverageSection';
-import { QuoteSection } from './components/QuoteSection';
-import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { ProcessSection } from './components/ProcessSection';
+import { QuoteSection } from './components/QuoteSection';
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState<CategoryId | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string>('');
 
   useEffect(() => {
@@ -23,6 +25,25 @@ export function App() {
 
   const handleSelectEquipment = (item: EquipmentItem) => {
     setSelectedEquipmentId(item.id);
+  };
+
+  const handleQuickCategorySelect = (categoryId: CategoryId) => {
+    setActiveCategory(categoryId);
+    setSearchQuery('');
+    const el = document.getElementById('catalogo');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleFocusCatalogSearch = () => {
+    const el = document.getElementById('catalogo');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setTimeout(() => {
+      document.getElementById('catalog-search')?.focus();
+    }, 350);
   };
 
   return (
@@ -37,28 +58,52 @@ export function App() {
       <Header />
 
       <main id="conteudo-principal" className="flex-1">
-        <Hero />
-        <CategoriesSection onSelectCategory={setActiveCategory} />
-        <DifferentialsSection />
-        <ProcessSection />
-        <FleetSection
-          activeCategory={activeCategory}
-          onChangeCategory={setActiveCategory}
-          selectedEquipmentId={selectedEquipmentId}
-          onSelectEquipment={handleSelectEquipment}
+        <Hero
+          onQuickCategorySelect={handleQuickCategorySelect}
+          onFocusCatalogSearch={handleFocusCatalogSearch}
         />
-        <CoverageSection />
-        <QuoteSection
-          selectedEquipmentId={selectedEquipmentId}
-          onChangeSelectedEquipment={setSelectedEquipmentId}
-        />
+
+        {templateConfig.sections.categories && (
+          <CategoriesSection
+            onSelectCategory={(catId) => {
+              setActiveCategory(catId);
+              setSearchQuery('');
+            }}
+          />
+        )}
+
+        {templateConfig.sections.catalog && (
+          <CatalogSection
+            activeCategory={activeCategory}
+            onChangeCategory={setActiveCategory}
+            searchQuery={searchQuery}
+            onChangeSearchQuery={setSearchQuery}
+            selectedEquipmentId={selectedEquipmentId}
+            onSelectEquipment={handleSelectEquipment}
+          />
+        )}
+
+        {templateConfig.sections.differentials && <DifferentialsSection />}
+        {templateConfig.sections.process && <ProcessSection />}
+        {templateConfig.sections.brands && <BrandsSection />}
+
+        {templateConfig.sections.quote && (
+          <QuoteSection
+            selectedEquipmentId={selectedEquipmentId}
+            onChangeSelectedEquipment={setSelectedEquipmentId}
+          />
+        )}
       </main>
 
-      <Footer onSelectCategory={setActiveCategory} />
+      <Footer
+        onSelectCategory={(catId) => {
+          setActiveCategory(catId);
+          setSearchQuery('');
+        }}
+      />
       <FloatingWhatsApp selectedEquipmentId={selectedEquipmentId} />
     </div>
   );
 }
 
 export default App;
-

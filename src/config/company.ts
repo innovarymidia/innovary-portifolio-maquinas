@@ -1,7 +1,3 @@
-/**
- * Configuracao institucional centralizada da empresa locadora.
- * Edite este arquivo para personalizar o template comercial para qualquer cliente.
- */
 export interface CompanyConfig {
   brandName: string;
   brandSubtitle: string;
@@ -18,16 +14,9 @@ export interface CompanyConfig {
     addressLabel: string;
     cnpjLabel: string;
   };
-  /** URL opcional de webhook (Formspree, Make, n8n, CRM) para envio de leads */
   formWebhookUrl: string;
   navigation: { label: string; href: string }[];
-  coverage: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    mobilizationNote: string;
-    regions: { title: string; detail: string }[];
-  };
+  brands: { name: string; focus: string }[];
   seo: {
     title: string;
     description: string;
@@ -36,10 +25,10 @@ export interface CompanyConfig {
 
 export const companyConfig: CompanyConfig = {
   brandName: 'SUA LOCADORA',
-  brandSubtitle: 'ENGENHARIA E MÁQUINAS',
+  brandSubtitle: 'EQUIPAMENTOS E OBRAS',
   tagline:
-    'Locação de máquinas pesadas e equipamentos de engenharia civil com revisão técnica e agilidade operacional para sua obra.',
-  templateCredit: 'Template Comercial • Innovary Mídia',
+    'Locação de equipamentos elétricos, máquinas para concreto, compactação, corte, andaimes e infraestrutura leve para construção, reformas e serviços.',
+  templateCredit: 'Innovary | Rental Equipment Template',
   contact: {
     phoneDisplay: '(00) 90000-0000',
     phoneHref: 'tel:+5500900000000',
@@ -49,48 +38,29 @@ export const companyConfig: CompanyConfig = {
     email: 'orcamento@suaempresa.com.br',
     businessHours: 'Seg. a Sex. das 07h30 às 18h00 • Sáb. das 08h00 às 12h00',
     cityRegion: 'Sua Cidade e Região Metropolitana',
-    addressLabel: 'Base Operacional: configure o endereço da sua empresa',
+    addressLabel: 'Loja e Centro de Distribuição: configure o endereço da sua empresa',
     cnpjLabel: 'CNPJ 00.000.000/0000-00 (Exemplo configurável)',
   },
   formWebhookUrl: '',
   navigation: [
     { label: 'Categorias', href: '#categorias' },
+    { label: 'Equipamentos', href: '#catalogo' },
+    { label: 'Como funciona', href: '#processo' },
     { label: 'Diferenciais', href: '#diferenciais' },
-    { label: 'Como Funciona', href: '#processo' },
-    { label: 'Frota', href: '#frota' },
-    { label: 'Atendimento', href: '#atendimento' },
     { label: 'Contato', href: '#orcamento' },
   ],
-  coverage: {
-    eyebrow: 'LOGÍSTICA E MOBILIZAÇÃO',
-    title: 'ATENDIMENTO ESTRUTURADO PARA OBRAS URBANAS E RODOVIÁRIAS',
-    description:
-      'Deslocamento programado de equipamentos em caminhão prancha ou guincho plataforma, garantindo previsibilidade de entrega para o cronograma do canteiro.',
-    mobilizationNote:
-      'Configure neste bloco os municípios, polos industriais e rodovias atendidos pela sua operação.',
-    regions: [
-      {
-        title: 'Capital e Região Metropolitana',
-        detail: 'Atendimento prioritário para obras comerciais, fundações e infraestrutura urbana.',
-      },
-      {
-        title: 'Polos Industriais e Logísticos',
-        detail: 'Suporte para terraplanagem de galpões, pátios de manobra e movimentação pesada.',
-      },
-      {
-        title: 'Obras Rodoviárias e Loteamentos',
-        detail: 'Fornecimento contínuo de linha amarela para pavimentação, drenagem e saneamento.',
-      },
-      {
-        title: 'Regiões Vizinhas sob Consulta',
-        detail: 'Mobilização programada para contratos semanais, quinzenais e mensais em todo o estado.',
-      },
-    ],
-  },
+  brands: [
+    { name: 'DEWALT', focus: 'Demolição e energia' },
+    { name: 'WACKER NEUSON', focus: 'Compactação de solo' },
+    { name: 'MENEGOTTI', focus: 'Linha concreto' },
+    { name: 'KÄRCHER', focus: 'Limpeza profissional' },
+    { name: 'STIHL', focus: 'Jardinagem e corte' },
+    { name: 'CSM', focus: 'Betoneiras e mistura' },
+    { name: 'BUFFALO', focus: 'Rompedores e motores' },
+  ],
   seo: {
-    title: 'Locação de Máquinas e Equipamentos para Construção Civil',
+    title: 'Locação de Equipamentos para Construção, Obras e Serviços',
     description:
-      'Locação de escavadeiras, pás carregadeiras, caminhões munck, plataformas elevatórias, tratores e rolos compactadores para obras civis.',
+      'Catálogo modular para locação de betoneiras, marteletes, compactadores, cortadoras de piso, andaimes, lavadoras, ferramentas de jardinagem e geradores.',
   },
 };
-

@@ -1,136 +1,123 @@
-import heroExcavator from '../assets/images/hero-excavator.webp';
+import heroMixCutout from '../assets/images/v2/hero-mix-cutout.webp';
 import siteHeroConstruction from '../assets/images/site-hero-construction.webp';
 import siteLogistics from '../assets/images/site-logistics.webp';
-import siteEarthwork from '../assets/images/site-earthwork.webp';
 
 export const heroConfig = {
-  headlineTop: 'LOCAÇÃO E SERVIÇOS',
-  headlineRightTop: 'MÁQUINAS',
-  headlineRightBottom: 'PESADAS',
-  regionSubtitle: 'Para obras civis, terraplanagem e infraestrutura',
+  eyebrow: 'LOCAÇÃO DE EQUIPAMENTOS PARA CONSTRUÇÃO, OBRAS E SERVIÇOS',
+  headlineLine1: 'TUDO QUE SUA OBRA',
+  headlineLine2: 'PRECISA, VOCÊ',
+  headlineLine3: 'ENCONTRA AQUI.',
   description:
-    'Solicite seu orçamento técnico. Nossa equipe indica o equipamento ideal para a produtividade e o prazo da sua obra.',
-  primaryCtaLabel: 'Solicitar Orçamento',
-  secondaryCtaLabel: 'Explorar Frota',
-  topRightBadgeLabel: 'DISPONIBILIDADE',
-  topRightBadgeValue: 'IMEDIATA',
-  topRightBadgeNote: 'Modelos diários, semanais e mensais',
-  calloutTitle: 'FROTA REVISADA EM CAMPO',
+    'Equipamentos profissionais para construção, reformas e serviços. Catálogo organizado para você encontrar a máquina certa e solicitar a locação sem burocracia.',
+  primaryCtaLabel: 'Encontrar equipamento',
+  secondaryCtaLabel: 'Solicitar orçamento',
+  calloutTitle: 'CATÁLOGO MODULAR PARA SUA OBRA',
   calloutText:
-    'Equipamentos inspecionados com checklist preventivo para máxima disponibilidade e desempenho na obra.',
-  bottomLeftMetric: 'ÁGIL',
-  bottomLeftSub: 'Atendimento comercial',
-  bottomRightValue: 'LINHA PESADA',
-  bottomRightSub: 'Escavação, carga, elevação e compactação',
-  centerpieceImage: heroExcavator,
+    'Ferramentas elétricas, concreto, demolição, compactação, corte, andaimes, limpeza, jardinagem e energia.',
+  bottomLeftMetric: 'COMPLETA',
+  bottomLeftSub: 'Linha para obra e manutenção',
+  bottomRightValue: 'LOCAÇÃO ÁGIL',
+  bottomRightSub: 'Diária, semanal ou mensal sob consulta',
+  centerpieceImage: heroMixCutout,
   centerpieceAlt:
-    'Escavadeira hidráulica pesada amarela e grafite em destaque para locação',
+    'Composição com betoneira, rolo compactador compacto, martelete demolidor, placa vibratória e gerador de energia para locação',
   backgroundSceneImage: siteHeroConstruction,
-  backgroundSceneAlt:
-    'Máquinas pesadas e escavadeiras operando em canteiro de obras civis e infraestrutura',
+  backgroundSceneAlt: 'Canteiro de obras civis com equipamentos em operação',
 };
 
 export const categoriesSectionConfig = {
-  title: 'EQUIPAMENTOS PARA QUALQUER DEMANDA',
+  title: 'ENCONTRE O EQUIPAMENTO IDEAL',
   subtitle:
-    'Selecione a categoria ideal para a fase da sua obra e visualize imediatamente os equipamentos disponíveis na frota.',
+    'Navegue pelas categorias disponíveis no estoque e filtre imediatamente os equipamentos para a fase da sua obra ou serviço.',
+};
+
+export const catalogSectionConfig = {
+  eyebrow: 'CATÁLOGO INTELIGENTE',
+  title: 'EQUIPAMENTOS MAIS PROCURADOS',
+  subtitle:
+    'Busque por nome, marca ou aplicação, filtre por categoria e envie o equipamento selecionado direto para o orçamento ou WhatsApp.',
 };
 
 export const differentialsConfig = {
-  eyebrow: 'PADRÃO OPERACIONAL',
-  title: 'DIFERENCIAIS QUE EVITAM PARADAS NO CANTEIRO',
+  eyebrow: 'DIFERENCIAIS',
+  title: 'POR QUE ALUGAR COM A GENTE?',
   description:
-    'Cada contrato é estruturado para reduzir o tempo improdutivo da obra com inspeção mecânica prévia, documentação em dia e resposta técnica direta.',
-  sceneImage: siteHeroConstruction,
-  sceneImageAlt:
-    'Escavadeiras hidráulicas atuando em obra civil de infraestrutura com estruturas em concreto',
-  sceneCaption: 'Operação em campo: terraplanagem, fundações e infraestrutura pesada',
+    'Estruturamos cada locação para gerar economia frente à compra de máquinas, manter a obra produtiva e oferecer atendimento técnico direto.',
+  sceneImage: siteLogistics,
+  sceneImageAlt: 'Equipamentos de construção organizados em pátio logístico para expedição',
+  sceneCaption: 'Logística e revisão técnica: equipamentos testados antes da retirada ou entrega',
   items: [
     {
       icon: 'wrench' as const,
-      title: 'Manutenção Preventiva',
+      title: 'Equipamentos Revisados',
       description:
-        'Checklist técnico de sistemas hidráulicos, filtros, pneus e esteiras antes de cada mobilização.',
+        'Inspeção funcional de motor, elétrica, impacto e acessórios antes de cada saída.',
     },
     {
-      icon: 'truck' as const,
-      title: 'Logística de Mobilização',
+      icon: 'wallet' as const,
+      title: 'Economia na Obra',
       description:
-        'Transporte programado com prancha própria ou parceira alinhado ao cronograma de entrada da obra.',
+        'Pague apenas pelo período de utilização sem imobilizar capital ou arcar com manutenção corretiva.',
     },
     {
-      icon: 'shield' as const,
-      title: 'Conformidade e Segurança',
+      icon: 'layers' as const,
+      title: 'Variedade em Estoque',
       description:
-        'Equipamentos preparados conforme normas aplicáveis (NR-12, NR-18) com laudos e documentação.',
-    },
-    {
-      icon: 'clock' as const,
-      title: 'Substituição Assistida',
-      description:
-        'Suporte técnico em campo e plano de contingência para manter a frente de serviço ativa.',
-    },
-    {
-      icon: 'fileCheck' as const,
-      title: 'Contratos Flexíveis',
-      description:
-        'Modalidades por diária, semana, quinzena ou contrato mensal com renovação simplificada.',
+        'Do martelete e betoneira ao gerador, andaime e lavadora industrial no mesmo fornecedor.',
     },
     {
       icon: 'headphones' as const,
-      title: 'Dimensionamento Técnico',
+      title: 'Atendimento Especializado',
       description:
-        'Apoio consultivo para escolher capacidade de caçamba, alcance e tonelagem adequados ao solo.',
+        'Orientação prática para escolher potência, voltagem e capacidade ideais para cada serviço.',
     },
   ],
 };
 
 export const processConfig = {
   eyebrow: 'COMO FUNCIONA',
-  title: 'LOCAÇÃO DESCOMPLICADA EM 4 ETAPAS',
+  title: 'ALUGUE EM POUCOS PASSOS',
   subtitle:
-    'Do pedido de orçamento à entrega técnica na obra, com comunicação direta e sem burocracia excessiva.',
-  sceneImage: siteEarthwork,
-  sceneImageAlt:
-    'Rolo compactador vibratório e motoniveladora realizando terraplanagem em obra viária',
+    'Um processo direto do catálogo ao canteiro para você contratar ferramentas e equipamentos com agilidade.',
   steps: [
     {
       number: '01',
-      title: 'Seleção do Equipamento',
+      title: 'Escolha o equipamento',
       description:
-        'Escolha a máquina no catálogo ou informe o tipo de serviço e a fase da obra pelo formulário ou WhatsApp.',
+        'Explore as categorias ou utilize a busca do catálogo para localizar a máquina ou ferramenta ideal.',
     },
     {
       number: '02',
-      title: 'Dimensionamento e Proposta',
+      title: 'Solicite orçamento',
       description:
-        'Confirmamos disponibilidade, modalidade (com ou sem operador), prazo e valor de mobilização.',
+        'Envie o item selecionado pelo formulário ou WhatsApp já identificado com marca e referência.',
     },
     {
       number: '03',
-      title: 'Aprovação e Contrato',
+      title: 'Combine o período',
       description:
-        'Formalização objetiva do contrato comercial e agendamento da janela de recebimento no canteiro.',
+        'Defina a modalidade de cobrança (diária, semanal ou mensal) e confirme a disponibilidade.',
     },
     {
       number: '04',
-      title: 'Entrega e Suporte em Obra',
+      title: 'Receba conforme condições',
       description:
-        'Equipamento entregue revisado no local combinado com canal direto para suporte durante toda a locação.',
+        'Retire no balcão ou receba diretamente na obra conforme as condições combinadas de entrega.',
     },
   ],
 };
 
-export const logisticsImageConfig = {
-  image: siteLogistics,
-  alt: 'Caminhão prancha preparando mobilização de escavadeira hidráulica em pátio de locação',
+export const brandsSectionConfig = {
+  eyebrow: 'MARCAS E PARCEIROS',
+  title: 'TRABALHAMOS COM EQUIPAMENTOS DE QUALIDADE',
+  subtitle:
+    'Espaço configurável para destacar fabricantes presentes no portfólio da locadora (ative ou oculte conforme o estoque do cliente).',
 };
 
 export const rentalPeriods = [
-  'Diária / Pontual',
-  'Semanal (7 dias)',
-  'Quinzenal (15 dias)',
-  'Mensal (30 dias)',
-  'Projeto / Longo prazo',
+  'Diária',
+  'Semanal',
+  'Quinzenal',
+  'Mensal',
+  'Período sob consulta',
 ] as const;
-

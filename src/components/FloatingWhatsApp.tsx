@@ -1,19 +1,20 @@
 import { MessageSquare } from 'lucide-react';
-import { fleetEquipments } from '../config/catalog';
+import { equipmentCatalog } from '../config/catalog';
 import { companyConfig } from '../config/company';
-import { buildQuoteMessage, buildWhatsAppUrl } from '../lib/quote';
 import { trackEvent } from '../lib/analytics';
+import { buildQuoteMessage, buildWhatsAppUrl } from '../lib/quote';
 
 interface FloatingWhatsAppProps {
   selectedEquipmentId: string;
 }
 
 export function FloatingWhatsApp({ selectedEquipmentId }: FloatingWhatsAppProps) {
-  const selected = fleetEquipments.find((item) => item.id === selectedEquipmentId);
+  const selected = equipmentCatalog.find((item) => item.id === selectedEquipmentId);
   const message = selected
     ? buildQuoteMessage({
         equipmentLabel: selected.name,
         equipmentCode: selected.code,
+        brand: selected.brand,
       })
     : companyConfig.contact.whatsappDefaultMessage;
 
@@ -40,4 +41,3 @@ export function FloatingWhatsApp({ selectedEquipmentId }: FloatingWhatsAppProps)
     </a>
   );
 }
-

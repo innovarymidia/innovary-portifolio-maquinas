@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Menu, Phone, X, MessageSquare } from 'lucide-react';
+import { Menu, MessageSquare, Phone, X } from 'lucide-react';
 import { companyConfig } from '../config/company';
-import { buildWhatsAppUrl } from '../lib/quote';
 import { trackEvent } from '../lib/analytics';
+import { buildWhatsAppUrl } from '../lib/quote';
 import { BrandLogo } from './BrandLogo';
 
 export function Header() {
@@ -32,14 +32,16 @@ export function Header() {
 
         <div className="flex items-center gap-2.5">
           <a
-            href={companyConfig.contact.phoneHref}
-            onClick={() => trackEvent('phone_click', { location: 'header' })}
+            href={quickWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_click', { location: 'header' })}
             className="hidden sm:inline-flex items-center gap-2.5 min-h-[48px] px-4 rounded-full bg-white border border-[#D6D9DE] hover:border-[#25272B] text-sm font-semibold text-[#25272B] transition-colors cursor-pointer"
           >
             <span className="w-7 h-7 rounded-full bg-[#F3B51B] text-[#25272B] flex items-center justify-center">
-              <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+              <MessageSquare className="w-3.5 h-3.5" aria-hidden="true" />
             </span>
-            <span>{companyConfig.contact.phoneDisplay}</span>
+            <span>WhatsApp</span>
           </a>
 
           <a
@@ -47,7 +49,7 @@ export function Header() {
             onClick={() => trackEvent('cta_click', { location: 'header' })}
             className="hidden md:inline-flex items-center justify-center min-h-[48px] px-5 rounded-[10px] bg-[#F3B51B] hover:bg-[#E0A310] text-[#25272B] text-sm font-semibold transition-colors cursor-pointer"
           >
-            Orçamento
+            Solicitar orçamento
           </a>
 
           <button
@@ -110,4 +112,3 @@ export function Header() {
     </header>
   );
 }
-

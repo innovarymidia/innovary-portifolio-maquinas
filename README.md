@@ -1,35 +1,18 @@
-# Template Comercial: Locação de Máquinas e Equipamentos para Construção Civil
+# Innovary | Rental Equipment Template (v2)
 
-Template modular em **React + TypeScript + Tailwind CSS** desenvolvido para personalização rápida por clientes do segmento de locação de máquinas pesadas e equipamentos de engenharia civil.
+Template comercial modular em **React + TypeScript + Tailwind CSS** para empresas de **locação de equipamentos para construção, obras e serviços**.
 
-## Como personalizar sem alterar a estrutura
+## Arquitetura modular para personalização rápida
 
-1. **Dados da empresa, contatos e área de atendimento**: edite `src/config/company.ts`.
-2. **Categorias e catálogo da frota**: edite `src/config/catalog.ts`.
-3. **Textos do Hero, Diferenciais e Processo**: edite `src/config/sections.ts`.
-4. **Identidade visual / tokens**: edite `src/config/theme.ts` e `src/index.css`.
-5. **Google Analytics 4, GTM e Meta Pixel**: defina `VITE_GA_MEASUREMENT_ID`, `VITE_GTM_ID` e `VITE_META_PIXEL_ID` no `.env` (veja `.env.example`) ou em `src/config/analytics.ts`.
+- **Configuração de perfil e módulos** ([src/config/template.ts](src/config/template.ts)): ative ou desative seções (`brands`, `categories`, `catalog`, `differentials`, `process`, `quote`), habilite exibição opcional de preços (`showOptionalPrice`) e escolha as categorias visíveis em `enabledCategoryIds` (incluindo `containers` quando fizer parte da operação do cliente).
+- **Biblioteca de categorias e catálogo inteligente** ([src/config/catalog.ts](src/config/catalog.ts)): categorias reutilizáveis e produtos com marca, modelo, especificação, unidade de cobrança, disponibilidade e busca integrada.
+- **Empresa, marcas e contatos** ([src/config/company.ts](src/config/company.ts)) e **textos de seções** ([src/config/sections.ts](src/config/sections.ts)).
+- **Rastreamento configurável** ([src/config/analytics.ts](src/config/analytics.ts) e `.env.example`): suporte a Google Analytics 4, Google Tag Manager e Meta Pixel.
 
-## Publicação em subpasta na Vercel (`/portifolio-maquinas`)
+## Versões no Git
 
-Por padrão, o `vite.config.ts` usa `base: '/portifolio-maquinas/'` e o `vercel.json` mapeia o subcaminho `/portifolio-maquinas`. Para publicar na raiz (`/`) de um domínio próprio, defina `VITE_BASE_PATH=/` nas variáveis de ambiente da Vercel.
-
-No repositório principal (`www.innovarymidia.com.br`), adicione ao `vercel.json`:
-
-```json
-{
-  "rewrites": [
-    {
-      "source": "/portifolio-maquinas",
-      "destination": "https://SEU-PROJETO.vercel.app/portifolio-maquinas"
-    },
-    {
-      "source": "/portifolio-maquinas/:path*",
-      "destination": "https://SEU-PROJETO.vercel.app/portifolio-maquinas/:path*"
-    }
-  ]
-}
-```
+- `v1` (`v1.0.0` / `main` atual): versão original de máquinas pesadas em produção na Vercel.
+- `v2`: nova versão principal com catálogo modular de equipamentos de construção, obras e serviços.
 
 ## Comandos
 

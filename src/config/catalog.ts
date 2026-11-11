@@ -1,19 +1,27 @@
-import catAerialLift from '../assets/images/cat-aerial-lift.webp';
-import catCompactor from '../assets/images/cat-compactor.webp';
-import catCraneTruck from '../assets/images/cat-crane-truck.webp';
-import catExcavator from '../assets/images/cat-excavator.webp';
-import catGrader from '../assets/images/cat-grader.webp';
-import catLoader from '../assets/images/cat-loader.webp';
-import fleetDumpTruck from '../assets/images/fleet-dump-truck.webp';
-import fleetMiniExcavator from '../assets/images/fleet-mini-excavator.webp';
+import catCleaning from '../assets/images/v2/cat-cleaning.webp';
+import catCompaction from '../assets/images/v2/cat-compaction.webp';
+import catConcrete from '../assets/images/v2/cat-concrete.webp';
+import catCutting from '../assets/images/v2/cat-cutting.webp';
+import catDemolition from '../assets/images/v2/cat-demolition.webp';
+import catGardening from '../assets/images/v2/cat-gardening.webp';
+import catPower from '../assets/images/v2/cat-power.webp';
+import catScaffolding from '../assets/images/v2/cat-scaffolding.webp';
+import presetContainers from '../assets/images/v2/preset-containers.webp';
+import prodCompactionWacker from '../assets/images/v2/prod-compaction-wacker.webp';
+import prodConcreteMenegotti from '../assets/images/v2/prod-concrete-menegotti.webp';
+import prodConcreteOmaer from '../assets/images/v2/prod-concrete-omaer.webp';
+import prodDemolitionDewalt from '../assets/images/v2/prod-demolition-dewalt.webp';
 
 export type CategoryId =
-  | 'escavadeiras'
-  | 'carregadeiras'
-  | 'caminhoes'
-  | 'plataformas'
-  | 'tratores'
-  | 'compactadores';
+  | 'demolicao'
+  | 'concreto'
+  | 'compactacao'
+  | 'corte'
+  | 'andaimes'
+  | 'limpeza'
+  | 'jardinagem'
+  | 'energia'
+  | 'containers';
 
 export interface EquipmentCategory {
   id: CategoryId;
@@ -27,195 +35,257 @@ export interface EquipmentCategory {
 export interface EquipmentItem {
   id: string;
   code: string;
-  categoryId: CategoryId;
   name: string;
-  subtitle: string;
+  categoryId: CategoryId;
+  brand: string;
+  model: string;
+  specification: string;
+  billingUnit: string;
+  availability: string;
+  /** Campo opcional: quando preenchido e showOptionalPrice=true, exibe valor referencial */
+  optionalPrice?: string;
   image: string;
   imageAlt: string;
-  specs: {
-    label: string;
-    value: string;
-  }[];
-  modality: string;
+  featured?: boolean;
 }
 
-export const equipmentCategories: EquipmentCategory[] = [
+export const categoryLibrary: EquipmentCategory[] = [
   {
-    id: 'escavadeiras',
-    title: 'ESCAVADEIRAS E MINI-ESCAVADEIRAS',
-    shortTitle: 'Escavadeiras',
-    description:
-      'Para qualquer etapa de escavação: de valas urbanas e fundações até movimentação pesada de solo.',
-    image: catExcavator,
-    imageAlt: 'Escavadeira hidráulica sobre esteiras isolada em fundo branco',
+    id: 'demolicao',
+    title: 'FURAÇÃO E DEMOLIÇÃO',
+    shortTitle: 'Demolição',
+    description: 'Marteletes, rompedores, perfuradores e acessórios para concreto e alvenaria.',
+    image: catDemolition,
+    imageAlt: 'Martelo demolidor rompedor industrial isolado em fundo branco',
   },
   {
-    id: 'carregadeiras',
-    title: 'PÁS CARREGADEIRAS E COMPACTAS',
-    shortTitle: 'Pás Carregadeiras',
-    description:
-      'Equipamentos articulados versáteis para carregamento de agregados, limpeza de canteiro e aterros.',
-    image: catLoader,
-    imageAlt: 'Pá carregadeira articulada amarela isolada em fundo branco',
+    id: 'concreto',
+    title: 'LINHA CONCRETO',
+    shortTitle: 'Concreto',
+    description: 'Betoneiras, vibradores de imersão, mangotes e misturadores de obra.',
+    image: catConcrete,
+    imageAlt: 'Betoneira profissional de 400 litros isolada em fundo branco',
   },
   {
-    id: 'caminhoes',
-    title: 'CAMINHÕES MUNCK E BASCULANTES',
-    shortTitle: 'Caminhões e Muncks',
-    description:
-      'Transporte, basculamento de materiais e içamento de cargas técnicas com precisão no canteiro.',
-    image: catCraneTruck,
-    imageAlt: 'Caminhão equipado com guindauto munck isolado em fundo branco',
+    id: 'compactacao',
+    title: 'COMPACTAÇÃO',
+    shortTitle: 'Compactação',
+    description: 'Placas vibratórias, compactadores de percussão e rolos compactos.',
+    image: catCompaction,
+    imageAlt: 'Placa vibratória compactadora de solo isolada em fundo branco',
   },
   {
-    id: 'plataformas',
-    title: 'PLATAFORMAS ELEVATÓRIAS',
-    shortTitle: 'Plataformas Elevatórias',
-    description:
-      'Acesso seguro em altura para montagens estruturais, instalações industriais e manutenção predial.',
-    image: catAerialLift,
-    imageAlt: 'Plataforma elevatória articulada amarela isolada em fundo branco',
+    id: 'corte',
+    title: 'CORTE E ACABAMENTO',
+    shortTitle: 'Corte e acabamento',
+    description: 'Cortadoras de piso, serras mármore, lixadeiras e equipamentos de acabamento.',
+    image: catCutting,
+    imageAlt: 'Cortadora de piso a combustão com disco diamantado em fundo branco',
   },
   {
-    id: 'tratores',
-    title: 'MOTONIVELADORAS E TRATORES',
-    shortTitle: 'Motoniveladoras e Tratores',
-    description:
-      'Alto torque e precisão para nivelamento de subleito, abertura de vias e corte de taludes.',
-    image: catGrader,
-    imageAlt: 'Motoniveladora pesada amarela isolada em fundo branco',
+    id: 'andaimes',
+    title: 'ANDAIMES E ESCORAMENTOS',
+    shortTitle: 'Andaimes e escoras',
+    description: 'Andaimes tubulares, escoras metálicas, plataformas e estruturas auxiliares.',
+    image: catScaffolding,
+    imageAlt: 'Conjunto de andaimes metálicos e escoras ajustáveis em fundo branco',
   },
   {
-    id: 'compactadores',
-    title: 'ROLOS COMPACTADORES',
-    shortTitle: 'Rolos Compactadores',
-    description:
-      'Compactação uniforme de solos granulares, bases de pavimento e camadas asfálticas.',
-    image: catCompactor,
-    imageAlt: 'Rolo compactador vibratório de tambor único isolado em fundo branco',
-  },
-];
-
-export const fleetEquipments: EquipmentItem[] = [
-  {
-    id: 'escavadeira-20t',
-    code: 'ESC-20T',
-    categoryId: 'escavadeiras',
-    name: 'Escavadeira Hidráulica 20t',
-    subtitle: 'Escavação profunda, taludes e carregamento de caminhões',
-    image: catExcavator,
-    imageAlt: 'Escavadeira Hidráulica 20 toneladas sobre esteiras',
-    specs: [
-      { label: 'Peso operacional', value: 'Classe 20 a 22 t' },
-      { label: 'Caçamba padrão', value: '1,0 a 1,2 m³' },
-      { label: 'Profundidade máx.', value: 'Até 6,6 m' },
-    ],
-    modality: 'Com ou sem operador',
+    id: 'limpeza',
+    title: 'LIMPEZA PROFISSIONAL',
+    shortTitle: 'Limpeza',
+    description: 'Lavadoras de alta pressão, aspiradores industriais e higienização pós-obra.',
+    image: catCleaning,
+    imageAlt: 'Lavadora profissional de alta pressão Kärcher sobre rodas em fundo branco',
   },
   {
-    id: 'mini-escavadeira-35t',
-    code: 'MESC-35',
-    categoryId: 'escavadeiras',
-    name: 'Mini Escavadeira 3,5t',
-    subtitle: 'Redes hidráulicas, drenagem e obras em espaços restritos',
-    image: fleetMiniExcavator,
-    imageAlt: 'Mini escavadeira compacta com esteiras de borracha e lâmina frontal',
-    specs: [
-      { label: 'Peso operacional', value: 'Classe 3,5 a 4,0 t' },
-      { label: 'Esteira', value: 'Borracha (baixo impacto)' },
-      { label: 'Profundidade máx.', value: 'Até 3,2 m' },
-    ],
-    modality: 'Diária, semanal ou mensal',
+    id: 'jardinagem',
+    title: 'MÁQUINAS PARA JARDINAGEM',
+    shortTitle: 'Jardinagem',
+    description: 'Motosserras, podadores, sopradores, roçadeiras e manutenção de áreas verdes.',
+    image: catGardening,
+    imageAlt: 'Equipamentos profissionais de jardinagem e poda em fundo branco',
   },
   {
-    id: 'pa-carregadeira-18m3',
-    code: 'CAR-180',
-    categoryId: 'carregadeiras',
-    name: 'Pá Carregadeira Articulada 1,8 m³',
-    subtitle: 'Movimentação de brita, areia, entulho e alimentação de usinas',
-    image: catLoader,
-    imageAlt: 'Pá carregadeira articulada amarela com caçamba frontal',
-    specs: [
-      { label: 'Capacidade caçamba', value: '1,8 a 2,1 m³' },
-      { label: 'Peso operacional', value: 'Classe 11 a 13 t' },
-      { label: 'Altura de descarga', value: 'Até 2,9 m' },
-    ],
-    modality: 'Com ou sem operador',
+    id: 'energia',
+    title: 'ENERGIA E ILUMINAÇÃO',
+    shortTitle: 'Energia e iluminação',
+    description: 'Geradores portáteis, torres de iluminação, quadros e extensões industriais.',
+    image: catPower,
+    imageAlt: 'Gerador de energia portátil amarelo e preto em fundo branco',
   },
   {
-    id: 'caminhao-munck-15t',
-    code: 'MNK-150',
-    categoryId: 'caminhoes',
-    name: 'Caminhão Guindauto (Munck) 15t',
-    subtitle: 'Içamento, descarga técnica e transporte de pré-moldados',
-    image: catCraneTruck,
-    imageAlt: 'Caminhão carroceria aberta equipado com guindaste articulado munck',
-    specs: [
-      { label: 'Momento de carga', value: 'Classe 15 a 20 tm' },
-      { label: 'Alcance hidráulico', value: 'Até 14 m' },
-      { label: 'Patolas', value: 'Estabilização hidráulica' },
-    ],
-    modality: 'Operação com motorista/operador',
-  },
-  {
-    id: 'caminhao-basculante-12m3',
-    code: 'BSC-12M',
-    categoryId: 'caminhoes',
-    name: 'Caminhão Basculante Traçado 12 m³',
-    subtitle: 'Bota-fora, transporte de terra, brita e apoio à terraplanagem',
-    image: fleetDumpTruck,
-    imageAlt: 'Caminhão basculante pesado 6x4 amarelo e grafite',
-    specs: [
-      { label: 'Caçamba basculante', value: '12 a 14 m³' },
-      { label: 'Tração', value: '6x4 Off-Road' },
-      { label: 'Aplicação', value: 'Terraplanagem e agregados' },
-    ],
-    modality: 'Diária, semanal ou mensal',
-  },
-  {
-    id: 'plataforma-articulada-16m',
-    code: 'PLT-16A',
-    categoryId: 'plataformas',
-    name: 'Plataforma Elevatória Articulada 16m',
-    subtitle: 'Montagem metálica, cobertura, elétrica e fachada industrial',
-    image: catAerialLift,
-    imageAlt: 'Plataforma elevatória articulada diesel para trabalho em altura',
-    specs: [
-      { label: 'Altura de trabalho', value: '16 m (classe 15 a 20 m)' },
-      { label: 'Alcance horizontal', value: 'Até 9,0 m' },
-      { label: 'Norma', value: 'Conforme NR-18 / NR-35' },
-    ],
-    modality: 'Diária, semanal ou mensal',
-  },
-  {
-    id: 'motoniveladora-140hp',
-    code: 'MNV-140',
-    categoryId: 'tratores',
-    name: 'Motoniveladora Articulada 140 HP',
-    subtitle: 'Nivelamento fino, regularização de sub-base e abertura de pistas',
-    image: catGrader,
-    imageAlt: 'Motoniveladora pesada amarela com lâmina central e escarificador',
-    specs: [
-      { label: 'Potência nominal', value: 'Classe 140 a 170 HP' },
-      { label: 'Largura da lâmina', value: '3,66 m (12 pés)' },
-      { label: 'Peso operacional', value: 'Classe 15 a 16 t' },
-    ],
-    modality: 'Com ou sem operador',
-  },
-  {
-    id: 'rolo-compactador-11t',
-    code: 'CMP-11T',
-    categoryId: 'compactadores',
-    name: 'Rolo Compactador Vibratório 11t',
-    subtitle: 'Compactação de aterros, pavimentação e vias de acesso pesado',
-    image: catCompactor,
-    imageAlt: 'Rolo compactador vibratório de cilindro liso com cabine fechada',
-    specs: [
-      { label: 'Peso operacional', value: 'Classe 11 a 12 t' },
-      { label: 'Largura do cilindro', value: '2,13 m' },
-      { label: 'Sistema', value: 'Tambor liso ou kit pé-de-carneiro' },
-    ],
-    modality: 'Diária, semanal ou mensal',
+    id: 'containers',
+    title: 'CONTAINERS E MÓDULOS',
+    shortTitle: 'Containers e módulos',
+    description: 'Containers para escritório, almoxarifado, vestiários e módulos habitáveis.',
+    image: presetContainers,
+    imageAlt: 'Conjunto de containers modulares amarelos e brancos para canteiro de obra',
   },
 ];
 
+export const equipmentCatalog: EquipmentItem[] = [
+  {
+    id: 'betoneira-400l-menegotti',
+    code: 'CON-400M',
+    name: 'Betoneira 400 Litros Prime',
+    categoryId: 'concreto',
+    brand: 'Menegotti',
+    model: 'Conforme equipamento',
+    specification: 'Capacidade de 400 L (monofásica)',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: prodConcreteMenegotti,
+    imageAlt: 'Betoneira amarela Menegotti 400 litros isolada em fundo branco',
+    featured: true,
+  },
+  {
+    id: 'martelo-demolidor-1600w',
+    code: 'DEM-1600D',
+    name: 'Martelo Demolidor SDS-Max 1600W',
+    categoryId: 'demolicao',
+    brand: 'DeWalt',
+    model: 'Conforme equipamento',
+    specification: 'Energia de impacto de 35 J com controle de vibração',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: prodDemolitionDewalt,
+    imageAlt: 'Martelo demolidor DeWalt 1600W amarelo e preto em fundo branco',
+    featured: true,
+  },
+  {
+    id: 'placa-vibratoria-wacker',
+    code: 'CMP-1550W',
+    name: 'Placa Vibratória Reversível / Unidirecional',
+    categoryId: 'compactacao',
+    brand: 'Wacker Neuson',
+    model: 'Conforme equipamento',
+    specification: 'Base de 500 mm com motor a gasolina',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: prodCompactionWacker,
+    imageAlt: 'Placa vibratória Wacker Neuson para compactação de solo',
+    featured: true,
+  },
+  {
+    id: 'cortadora-de-piso-combustao',
+    code: 'CRT-350P',
+    name: 'Cortadora de Piso e Asfalto',
+    categoryId: 'corte',
+    brand: 'Conforme estoque',
+    model: 'Conforme equipamento',
+    specification: 'Disco diamantado de até 350 mm e tanque de água',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catCutting,
+    imageAlt: 'Cortadora de piso amarela com motor a combustão e disco frontal',
+    featured: true,
+  },
+  {
+    id: 'martelo-rompedor-1550w',
+    code: 'DEM-1550B',
+    name: 'Martelo Rompedor 1550W',
+    categoryId: 'demolicao',
+    brand: 'Buffalo',
+    model: 'Conforme equipamento',
+    specification: 'Potência de 1550W em versões 127V ou 220V',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catDemolition,
+    imageAlt: 'Martelo rompedor 1550W vertical para demolição de pisos e vigas',
+  },
+  {
+    id: 'betoneira-profissional-csm',
+    code: 'CON-400C',
+    name: 'Betoneira Profissional 400L',
+    categoryId: 'concreto',
+    brand: 'CSM',
+    model: 'Conforme equipamento',
+    specification: 'Tambor 400 L com cremalheira reforçada e caixa de proteção',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catConcrete,
+    imageAlt: 'Betoneira profissional CSM 400 litros amarela',
+  },
+  {
+    id: 'betoneira-compacta-omaer',
+    code: 'CON-250O',
+    name: 'Betoneira Elétrica de Obra',
+    categoryId: 'concreto',
+    brand: 'Omaer',
+    model: 'Conforme equipamento',
+    specification: 'Mistura contínua de argamassa e concreto leve',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: prodConcreteOmaer,
+    imageAlt: 'Betoneira elétrica amarela sobre cavalete com volante de basculamento',
+  },
+  {
+    id: 'andaime-tubular-escoras',
+    code: 'AND-150M',
+    name: 'Conjunto de Andaimes e Escoras Metálicas',
+    categoryId: 'andaimes',
+    brand: 'Linha Estrutural',
+    model: 'Conforme equipamento',
+    specification: 'Torres moduladas, pisos metálicos, rodízios e escoras ajustáveis',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catScaffolding,
+    imageAlt: 'Torres de andaimes metálicos e escoras reguláveis de obra',
+    featured: true,
+  },
+  {
+    id: 'lavadora-alta-pressao-karcher',
+    code: 'LMP-HD925',
+    name: 'Lavadora de Alta Pressão Industrial',
+    categoryId: 'limpeza',
+    brand: 'Kärcher',
+    model: 'Conforme equipamento',
+    specification: 'Alta vazão e chassi tubular para limpeza pesada em obra',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catCleaning,
+    imageAlt: 'Lavadora de alta pressão profissional Kärcher sobre chassi tubular',
+    featured: true,
+  },
+  {
+    id: 'kit-jardinagem-stihl',
+    code: 'JRD-STH',
+    name: 'Linha Profissional de Poda e Limpeza Verde',
+    categoryId: 'jardinagem',
+    brand: 'Stihl',
+    model: 'Conforme equipamento',
+    specification: 'Motosserra, podador de cerca viva e soprador costal',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catGardening,
+    imageAlt: 'Conjunto de equipamentos Stihl com motosserra, podador e soprador',
+  },
+  {
+    id: 'gerador-comercial-5700w',
+    code: 'ENE-5700D',
+    name: 'Gerador de Energia 5700W',
+    categoryId: 'energia',
+    brand: 'DeWalt',
+    model: 'Conforme equipamento',
+    specification: 'Potência de 5700W com tomadas protegidas e partida fácil',
+    billingUnit: 'Diária, semanal ou mensal',
+    availability: 'Sob consulta',
+    image: catPower,
+    imageAlt: 'Gerador portátil comercial 5700W amarelo com rodas de transporte',
+    featured: true,
+  },
+  {
+    id: 'modulo-container-obra',
+    code: 'CNT-600M',
+    name: 'Container Escritório / Almoxarifado Modular',
+    categoryId: 'containers',
+    brand: 'Estrutura Modular',
+    model: 'Conforme equipamento',
+    specification: 'Módulo padrão 6 m com isolamento termoacústico e ponto elétrico',
+    billingUnit: 'Mensal ou por projeto',
+    availability: 'Sob consulta',
+    image: presetContainers,
+    imageAlt: 'Containers modulares para escritório e almoxarifado em canteiro',
+  },
+];

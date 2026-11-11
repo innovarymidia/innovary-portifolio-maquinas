@@ -9,12 +9,13 @@ import {
   Phone,
   Send,
 } from 'lucide-react';
-import { equipmentCategories, fleetEquipments } from '../config/catalog';
+import { categoryLibrary, equipmentCatalog } from '../config/catalog';
 import { companyConfig } from '../config/company';
 import { rentalPeriods } from '../config/sections';
+import { templateConfig } from '../config/template';
+import { trackEvent } from '../lib/analytics';
 import { formatBrazilianPhone, isValidBrazilianPhone } from '../lib/phone';
 import { buildQuoteMessage, buildWhatsAppUrl } from '../lib/quote';
-import { trackEvent } from '../lib/analytics';
 
 interface QuoteSectionProps {
   selectedEquipmentId: string;
@@ -35,23 +36,33 @@ export function QuoteSection({
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const enabledCategories = useMemo(
+    () =>
+      categoryLibrary.filter((cat) =>
+        templateConfig.enabledCategoryIds.includes(cat.id)
+      ),
+    []
+  );
+
+  const enabledEquipments = useMemo(() => {
+    const enabledSet = new Set(templateConfig.enabledCategoryIds);
+    return equipmentCatalog.filter((item) => enabledSet.has(item.categoryId));
+  }, []);
+
   const selectedEquipment = useMemo(
-    () => fleetEquipments.find((eq) => eq.id === selectedEquipmentId),
-    [selectedEquipmentId]
+    () => enabledEquipments.find((eq) => eq.id === selectedEquipmentId),
+    [enabledEquipments, selectedEquipmentId]
   );
 
   const selectedCategory = useMemo(
-    () =>
-      equipmentCategories.find(
-        (cat) => `cat:${cat.id}` === selectedEquipmentId
-      ),
-    [selectedEquipmentId]
+    () => enabledCategories.find((cat) => `cat:${cat.id}` === selectedEquipmentId),
+    [enabledCategories, selectedEquipmentId]
   );
 
   const equipmentLabel = selectedEquipment
     ? selectedEquipment.name
     : selectedCategory
-      ? `Categoria: ${selectedCategory.shortTitle}`
+      ? `Linha: ${selectedCategory.shortTitle}`
       : 'Locação de Equipamento (a definir)';
 
   const liveMessage = useMemo(
@@ -59,13 +70,23 @@ export function QuoteSection({
       buildQuoteMessage({
         equipmentLabel,
         equipmentCode: selectedEquipment?.code,
+        brand: selectedEquipment?.brand,
         period,
         city,
         requesterName,
         phone,
         notes,
       }),
-    [equipmentLabel, selectedEquipment?.code, period, city, requesterName, phone, notes]
+    [
+      equipmentLabel,
+      selectedEquipment?.code,
+      selectedEquipment?.brand,
+      period,
+      city,
+      requesterName,
+      phone,
+      notes,
+    ]
   );
 
   const directWhatsAppUrl = buildWhatsAppUrl(
@@ -100,6 +121,7 @@ export function QuoteSection({
             phone,
             equipmentLabel,
             equipmentCode: selectedEquipment?.code ?? '',
+            brand: selectedEquipment?.brand ?? '',
             period,
             city: city.trim(),
             notes: notes.trim(),
@@ -108,7 +130,7 @@ export function QuoteSection({
         });
       }
     } catch {
-      // Mantem o fluxo do usuario funcional via handoff direto caso o webhook falhe
+      // Mantem o fluxo funcional via WhatsApp/copia mesmo sem resposta do webhook
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +152,7 @@ export function QuoteSection({
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Clipboard indisponivel em contexto nao seguro
+      // Clipboard indisponivel
     }
   };
 
@@ -141,29 +163,28 @@ export function QuoteSection({
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="bg-[#25272B] rounded-[12px] border border-[#25272B] overflow-hidden grid grid-cols-12">
-          {/* Coluna Esquerda: CTA Final + Canais Diretos */}
           <div className="col-span-12 lg:col-span-5 p-7 sm:p-10 text-white flex flex-col justify-between gap-8">
             <div>
               <span className="inline-flex items-center px-3 py-1 rounded-md bg-[#F3B51B] text-[#25272B] text-xs font-bold uppercase tracking-[0.12em]">
-                ORÇAMENTO COMERCIAL
+                ATENDIMENTO E ORÇAMENTO
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-white leading-[0.95] tracking-tight mt-4">
-                SOLICITE DISPONIBILIDADE PARA SUA OBRA
+                ENCONTRE O EQUIPAMENTO CERTO PARA SEU PROJETO.
               </h2>
               <p className="text-sm sm:text-base text-[#D6D9DE] leading-relaxed mt-3">
-                Preencha os dados ao lado ou envie sua solicitação diretamente pelo WhatsApp já com a identificação do equipamento selecionado.
+                Informe o equipamento e o período desejado. A solicitação sai pronta para envio direto no WhatsApp com identificação automática.
               </p>
 
               <div className="mt-6 rounded-[10px] border border-[#F3B51B]/50 bg-white/5 p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#F3B51B]">
-                  Equipamento identificado na solicitação
+                  Equipamento selecionado
                 </p>
                 <p className="font-display text-2xl font-bold uppercase text-white mt-1">
                   {equipmentLabel}
                 </p>
                 {selectedEquipment && (
                   <p className="text-xs text-[#D6D9DE] mt-0.5">
-                    Código de referência: {selectedEquipment.code} • {selectedEquipment.modality}
+                    {selectedEquipment.brand} • Ref.: {selectedEquipment.code} • {selectedEquipment.billingUnit}
                   </p>
                 )}
               </div>
@@ -212,12 +233,11 @@ export function QuoteSection({
                 className="min-h-[48px] w-full px-5 rounded-[10px] bg-[#F3B51B] hover:bg-[#E0A310] text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" aria-hidden="true" />
-                <span>Enviar Orçamento via WhatsApp</span>
+                <span>Enviar solicitação via WhatsApp</span>
               </a>
             </div>
           </div>
 
-          {/* Coluna Direita: Formulario Estruturado */}
           <div className="col-span-12 lg:col-span-7 bg-white p-6 sm:p-10 m-2 sm:m-3 rounded-[10px]">
             {submittedMessage ? (
               <div className="h-full flex flex-col justify-between gap-6" role="status" aria-live="polite">
@@ -230,7 +250,7 @@ export function QuoteSection({
                     MENSAGEM DE ORÇAMENTO GERADA
                   </h3>
                   <p className="text-sm text-[#656B73] mt-2 leading-relaxed">
-                    Sua solicitação já inclui a identificação técnica do equipamento selecionado. Envie agora pelo WhatsApp ou copie os dados abaixo.
+                    Sua solicitação já inclui a identificação completa do equipamento selecionado. Envie pelo WhatsApp ou copie abaixo.
                   </p>
 
                   <pre className="mt-5 p-4 rounded-[10px] bg-[#F2F3F5] border border-[#D6D9DE] text-xs sm:text-sm text-[#25272B] font-sans whitespace-pre-wrap leading-relaxed">
@@ -271,7 +291,7 @@ export function QuoteSection({
                     ) : (
                       <>
                         <Copy className="w-4 h-4" aria-hidden="true" />
-                        <span>Copiar Mensagem</span>
+                        <span>Copiar mensagem</span>
                       </>
                     )}
                   </button>
@@ -304,7 +324,7 @@ export function QuoteSection({
                         setRequesterName(e.target.value);
                         if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
                       }}
-                      placeholder="Ex.: Construtora / Eng. Responsável"
+                      placeholder="Ex.: Construtora, profissional ou responsável"
                       className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
                     />
                     {errors.name && (
@@ -357,16 +377,16 @@ export function QuoteSection({
                       onChange={(e) => onChangeSelectedEquipment(e.target.value)}
                       className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50 cursor-pointer"
                     >
-                      <option value="">Definir com suporte técnico</option>
-                      <optgroup label="Equipamentos Individuais">
-                        {fleetEquipments.map((item) => (
+                      <option value="">Indicar com suporte técnico</option>
+                      <optgroup label="Equipamentos do Catálogo">
+                        {enabledEquipments.map((item) => (
                           <option key={item.id} value={item.id}>
                             {item.name} ({item.code})
                           </option>
                         ))}
                       </optgroup>
                       <optgroup label="Por Categoria">
-                        {equipmentCategories.map((cat) => (
+                        {enabledCategories.map((cat) => (
                           <option key={cat.id} value={`cat:${cat.id}`}>
                             {cat.shortTitle}
                           </option>
@@ -380,7 +400,7 @@ export function QuoteSection({
                       htmlFor="quote-period"
                       className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
                     >
-                      Prazo Estimado
+                      Período de Locação
                     </label>
                     <select
                       id="quote-period"
@@ -402,14 +422,14 @@ export function QuoteSection({
                     htmlFor="quote-city"
                     className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
                   >
-                    Cidade / Local da Obra
+                    Cidade / Bairro da Obra
                   </label>
                   <input
                     id="quote-city"
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="Informe município, bairro ou rodovia"
+                    placeholder="Informe cidade, bairro ou endereço de entrega"
                     className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
                   />
                 </div>
@@ -426,12 +446,11 @@ export function QuoteSection({
                     rows={2}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Ex.: necessidade de operador, tipo de solo, altura de trabalho ou data prevista"
+                    placeholder="Ex.: voltagem 127V/220V, retirada na loja ou entrega, acessórios"
                     className="w-full px-3.5 py-2.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
                   />
                 </div>
 
-                {/* Preview automatico com identificacao do equipamento */}
                 <div className="rounded-[8px] bg-[#F2F3F5] border border-[#D6D9DE] p-3.5">
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-[#656B73]">
                     Mensagem automática identificada
@@ -448,7 +467,7 @@ export function QuoteSection({
                 >
                   <Send className="w-4 h-4" aria-hidden="true" />
                   <span>
-                    {isSubmitting ? 'Preparando solicitação...' : 'Solicitar Orçamento Técnico'}
+                    {isSubmitting ? 'Preparando solicitação...' : 'Solicitar orçamento'}
                   </span>
                 </button>
               </form>

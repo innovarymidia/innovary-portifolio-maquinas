@@ -1,6 +1,7 @@
 export interface QuotePayload {
   equipmentLabel: string;
   equipmentCode?: string;
+  brand?: string;
   requesterName?: string;
   phone?: string;
   period?: string;
@@ -10,22 +11,27 @@ export interface QuotePayload {
 
 /**
  * Gera uma mensagem comercial estruturada identificando automaticamente
- * o equipamento selecionado e os dados da solicitacao de orcamento.
+ * o equipamento selecionado, marca/referencia e os dados da solicitacao.
  */
 export function buildQuoteMessage(payload: QuotePayload): string {
   const lines: string[] = [
     'Ola! Gostaria de solicitar um orcamento de locacao.',
   ];
 
-  const equipmentText = payload.equipmentCode
-    ? `${payload.equipmentLabel} (Ref.: ${payload.equipmentCode})`
-    : payload.equipmentLabel;
+  const metaParts: string[] = [];
+  if (payload.brand?.trim()) metaParts.push(payload.brand.trim());
+  if (payload.equipmentCode?.trim()) metaParts.push(`Ref.: ${payload.equipmentCode.trim()}`);
 
-  if (equipmentText.trim()) {
-    lines.push(`Equipamento: ${equipmentText.trim()}`);
+  const equipmentText =
+    metaParts.length > 0
+      ? `${payload.equipmentLabel.trim()} (${metaParts.join(' • ')})`
+      : payload.equipmentLabel.trim();
+
+  if (equipmentText) {
+    lines.push(`Equipamento: ${equipmentText}`);
   }
   if (payload.period?.trim()) {
-    lines.push(`Prazo estimado: ${payload.period.trim()}`);
+    lines.push(`Periodo de locacao: ${payload.period.trim()}`);
   }
   if (payload.city?.trim()) {
     lines.push(`Cidade / Local da obra: ${payload.city.trim()}`);
@@ -37,7 +43,7 @@ export function buildQuoteMessage(payload: QuotePayload): string {
     lines.push(`Telefone: ${payload.phone.trim()}`);
   }
   if (payload.notes?.trim()) {
-    lines.push(`Detalhes da operacao: ${payload.notes.trim()}`);
+    lines.push(`Observacoes: ${payload.notes.trim()}`);
   }
 
   return lines.join('\n');
@@ -56,4 +62,3 @@ export function buildWhatsAppUrl(rawPhoneNumber: string, message: string): strin
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${normalized}?text=${encoded}`;
 }
-
