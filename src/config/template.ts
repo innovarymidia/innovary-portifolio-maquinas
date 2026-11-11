@@ -52,3 +52,4 @@ export const templateConfig: TemplateConfig = {
     quote: true,
   },
 };
+

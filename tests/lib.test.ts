@@ -8,6 +8,7 @@ import {
 import { buildQuoteMessage, buildWhatsAppUrl } from '../src/lib/quote.ts';
 import { validateAnalyticsIds } from '../src/lib/analytics.ts';
 import { filterCatalogEquipments } from '../src/lib/catalogFilter.ts';
+import { resolveClientId } from '../src/lib/clientProfile.ts';
 
 describe('phone mask and validation', () => {
   it('extracts up to 11 digits cleanly', () => {
@@ -160,5 +161,16 @@ describe('analytics ID validation', () => {
       gtmId: null,
       metaPixelId: null,
     });
+  });
+});
+
+describe('multi-client route resolution', () => {
+  it('resolves moshia via /moshia path, query string, or env default', () => {
+    assert.equal(resolveClientId('/moshia', ''), 'moshia');
+    assert.equal(resolveClientId('/moshia/', ''), 'moshia');
+    assert.equal(resolveClientId('/portifolio-maquinas/moshia', ''), 'moshia');
+    assert.equal(resolveClientId('/', '?cliente=moshia'), 'moshia');
+    assert.equal(resolveClientId('/', '', 'moshia'), 'moshia');
+    assert.equal(resolveClientId('/portifolio-maquinas/', ''), 'default');
   });
 });

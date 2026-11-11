@@ -1,6 +1,8 @@
 export interface CompanyConfig {
   brandName: string;
   brandSubtitle: string;
+  logoSrc?: string;
+  logoAlt?: string;
   tagline: string;
   templateCredit: string;
   contact: {

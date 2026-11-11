@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { analyticsConfig } from './config/analytics';
 import { type CategoryId, type EquipmentItem } from './config/catalog';
-import { templateConfig } from './config/template';
+import { getClientProfile } from './config/clients';
 import { initAnalytics } from './lib/analytics';
+import { resolveClientId } from './lib/clientProfile';
 import { BrandsSection } from './components/BrandsSection';
 import { CatalogSection } from './components/CatalogSection';
 import { CategoriesSection } from './components/CategoriesSection';
@@ -19,9 +20,26 @@ export function App() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string>('');
 
+  const profile = useMemo(() => {
+    const envClient =
+      typeof import.meta !== 'undefined' && import.meta.env
+        ? (import.meta.env.VITE_DEFAULT_CLIENT as string | undefined)
+        : undefined;
+    const clientId =
+      typeof window !== 'undefined'
+        ? resolveClientId(window.location.pathname, window.location.search, envClient)
+        : resolveClientId('/', '', envClient);
+    return getClientProfile(clientId);
+  }, []);
+
   useEffect(() => {
     initAnalytics(analyticsConfig);
-  }, []);
+    document.title = profile.company.seo.title;
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) {
+      themeMeta.setAttribute('content', profile.themeColorMeta);
+    }
+  }, [profile]);
 
   const handleSelectEquipment = (item: EquipmentItem) => {
     setSelectedEquipmentId(item.id);
@@ -47,24 +65,29 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F2F3F5] text-[#25272B]">
+    <div
+      data-client={profile.id}
+      className="min-h-screen flex flex-col bg-surface text-dark selection:bg-accent selection:text-dark"
+    >
       <a
         href="#conteudo-principal"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-md focus:bg-[#F3B51B] focus:text-[#25272B] focus:font-semibold"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-md focus:bg-accent focus:text-dark focus:font-semibold"
       >
         Ir para o conteúdo principal
       </a>
 
-      <Header />
+      <Header company={profile.company} />
 
       <main id="conteudo-principal" className="flex-1">
         <Hero
+          template={profile.template}
           onQuickCategorySelect={handleQuickCategorySelect}
           onFocusCatalogSearch={handleFocusCatalogSearch}
         />
 
-        {templateConfig.sections.categories && (
+        {profile.template.sections.categories && (
           <CategoriesSection
+            template={profile.template}
             onSelectCategory={(catId) => {
               setActiveCategory(catId);
               setSearchQuery('');
@@ -72,8 +95,10 @@ export function App() {
           />
         )}
 
-        {templateConfig.sections.catalog && (
+        {profile.template.sections.catalog && (
           <CatalogSection
+            company={profile.company}
+            template={profile.template}
             activeCategory={activeCategory}
             onChangeCategory={setActiveCategory}
             searchQuery={searchQuery}
@@ -83,12 +108,16 @@ export function App() {
           />
         )}
 
-        {templateConfig.sections.differentials && <DifferentialsSection />}
-        {templateConfig.sections.process && <ProcessSection />}
-        {templateConfig.sections.brands && <BrandsSection />}
+        {profile.template.sections.differentials && <DifferentialsSection />}
+        {profile.template.sections.process && <ProcessSection />}
+        {profile.template.sections.brands && (
+          <BrandsSection company={profile.company} />
+        )}
 
-        {templateConfig.sections.quote && (
+        {profile.template.sections.quote && (
           <QuoteSection
+            company={profile.company}
+            template={profile.template}
             selectedEquipmentId={selectedEquipmentId}
             onChangeSelectedEquipment={setSelectedEquipmentId}
           />
@@ -96,12 +125,17 @@ export function App() {
       </main>
 
       <Footer
+        company={profile.company}
+        template={profile.template}
         onSelectCategory={(catId) => {
           setActiveCategory(catId);
           setSearchQuery('');
         }}
       />
-      <FloatingWhatsApp selectedEquipmentId={selectedEquipmentId} />
+      <FloatingWhatsApp
+        company={profile.company}
+        selectedEquipmentId={selectedEquipmentId}
+      />
     </div>
   );
 }

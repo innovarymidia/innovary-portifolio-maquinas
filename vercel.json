@@ -1,6 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
+    { "source": "/portifolio-maquinas/moshia", "destination": "/index.html" },
+    { "source": "/portifolio-maquinas/moshia/(.*)", "destination": "/index.html" },
+    { "source": "/moshia", "destination": "/index.html" },
+    { "source": "/moshia/(.*)", "destination": "/index.html" },
     { "source": "/portifolio-maquinas", "destination": "/index.html" },
     { "source": "/portifolio-maquinas/(.*)", "destination": "/$1" }
   ]

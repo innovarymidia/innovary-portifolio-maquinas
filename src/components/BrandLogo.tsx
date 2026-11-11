@@ -1,21 +1,40 @@
-import { companyConfig } from '../config/company';
+import type { CompanyConfig } from '../config/company';
 
 interface BrandLogoProps {
+  company: CompanyConfig;
   inverted?: boolean;
 }
 
-export function BrandLogo({ inverted = false }: BrandLogoProps) {
+export function BrandLogo({ company, inverted = false }: BrandLogoProps) {
+  if (company.logoSrc) {
+    return (
+      <a
+        href="#topo"
+        className={`inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-[10px] ${
+          inverted ? 'bg-white px-3 py-2' : ''
+        }`}
+        aria-label={`${company.brandName}: ir para o topo`}
+      >
+        <img
+          src={company.logoSrc}
+          alt={company.logoAlt ?? `${company.brandName} ${company.brandSubtitle}`}
+          className={inverted ? 'h-12 w-auto object-contain' : 'h-12 sm:h-14 w-auto object-contain'}
+        />
+      </a>
+    );
+  }
+
   return (
     <a
       href="#topo"
-      className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F3B51B] rounded-lg"
-      aria-label={`${companyConfig.brandName}: ir para o topo`}
+      className="inline-flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-lg"
+      aria-label={`${company.brandName}: ir para o topo`}
     >
       <span
         className={`w-10 h-10 rounded-[10px] flex items-center justify-center border transition-colors ${
           inverted
-            ? 'bg-[#F3B51B] border-[#F3B51B] text-[#25272B]'
-            : 'bg-[#25272B] border-[#25272B] text-[#F3B51B] group-hover:bg-[#F3B51B] group-hover:text-[#25272B]'
+            ? 'bg-accent border-accent text-dark'
+            : 'bg-dark border-dark text-accent group-hover:bg-accent group-hover:text-dark'
         }`}
         aria-hidden="true"
       >
@@ -36,20 +55,19 @@ export function BrandLogo({ inverted = false }: BrandLogoProps) {
       <span className="flex flex-col leading-none">
         <span
           className={`font-display text-2xl font-extrabold tracking-tight uppercase ${
-            inverted ? 'text-white' : 'text-[#25272B]'
+            inverted ? 'text-white' : 'text-dark'
           }`}
         >
-          {companyConfig.brandName}
+          {company.brandName}
         </span>
         <span
           className={`text-[10px] font-semibold tracking-[0.16em] uppercase mt-0.5 ${
-            inverted ? 'text-[#D6D9DE]' : 'text-[#656B73]'
+            inverted ? 'text-line' : 'text-muted'
           }`}
         >
-          {companyConfig.brandSubtitle}
+          {company.brandSubtitle}
         </span>
       </span>
     </a>
   );
 }
-

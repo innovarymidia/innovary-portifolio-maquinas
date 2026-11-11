@@ -10,19 +10,23 @@ import {
   Send,
 } from 'lucide-react';
 import { categoryLibrary, equipmentCatalog } from '../config/catalog';
-import { companyConfig } from '../config/company';
+import type { CompanyConfig } from '../config/company';
 import { rentalPeriods } from '../config/sections';
-import { templateConfig } from '../config/template';
+import type { TemplateConfig } from '../config/template';
 import { trackEvent } from '../lib/analytics';
 import { formatBrazilianPhone, isValidBrazilianPhone } from '../lib/phone';
 import { buildQuoteMessage, buildWhatsAppUrl } from '../lib/quote';
 
 interface QuoteSectionProps {
+  company: CompanyConfig;
+  template: TemplateConfig;
   selectedEquipmentId: string;
   onChangeSelectedEquipment: (equipmentId: string) => void;
 }
 
 export function QuoteSection({
+  company,
+  template,
   selectedEquipmentId,
   onChangeSelectedEquipment,
 }: QuoteSectionProps) {
@@ -39,15 +43,15 @@ export function QuoteSection({
   const enabledCategories = useMemo(
     () =>
       categoryLibrary.filter((cat) =>
-        templateConfig.enabledCategoryIds.includes(cat.id)
+        template.enabledCategoryIds.includes(cat.id)
       ),
-    []
+    [template.enabledCategoryIds]
   );
 
   const enabledEquipments = useMemo(() => {
-    const enabledSet = new Set(templateConfig.enabledCategoryIds);
+    const enabledSet = new Set(template.enabledCategoryIds);
     return equipmentCatalog.filter((item) => enabledSet.has(item.categoryId));
-  }, []);
+  }, [template.enabledCategoryIds]);
 
   const selectedEquipment = useMemo(
     () => enabledEquipments.find((eq) => eq.id === selectedEquipmentId),
@@ -90,7 +94,7 @@ export function QuoteSection({
   );
 
   const directWhatsAppUrl = buildWhatsAppUrl(
-    companyConfig.contact.whatsappDigits,
+    company.contact.whatsappDigits,
     liveMessage
   );
 
@@ -112,8 +116,8 @@ export function QuoteSection({
 
     setIsSubmitting(true);
     try {
-      if (companyConfig.formWebhookUrl) {
-        await fetch(companyConfig.formWebhookUrl, {
+      if (company.formWebhookUrl) {
+        await fetch(company.formWebhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -130,7 +134,7 @@ export function QuoteSection({
         });
       }
     } catch {
-      // Mantem o fluxo funcional via WhatsApp/copia mesmo sem resposta do webhook
+      // Mantem fluxo funcional via WhatsApp/copia
     } finally {
       setIsSubmitting(false);
     }
@@ -159,31 +163,31 @@ export function QuoteSection({
   return (
     <section
       id="orcamento"
-      className="scroll-mt-20 py-16 lg:py-24 bg-white border-t border-[#D6D9DE]"
+      className="scroll-mt-20 py-16 lg:py-24 bg-white border-t border-line"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div className="bg-[#25272B] rounded-[12px] border border-[#25272B] overflow-hidden grid grid-cols-12">
+        <div className="bg-dark rounded-[12px] border border-dark overflow-hidden grid grid-cols-12">
           <div className="col-span-12 lg:col-span-5 p-7 sm:p-10 text-white flex flex-col justify-between gap-8">
             <div>
-              <span className="inline-flex items-center px-3 py-1 rounded-md bg-[#F3B51B] text-[#25272B] text-xs font-bold uppercase tracking-[0.12em]">
+              <span className="inline-flex items-center px-3 py-1 rounded-md bg-accent text-dark text-xs font-bold uppercase tracking-[0.12em]">
                 ATENDIMENTO E ORÇAMENTO
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-white leading-[0.95] tracking-tight mt-4">
                 ENCONTRE O EQUIPAMENTO CERTO PARA SEU PROJETO.
               </h2>
-              <p className="text-sm sm:text-base text-[#D6D9DE] leading-relaxed mt-3">
+              <p className="text-sm sm:text-base text-line leading-relaxed mt-3">
                 Informe o equipamento e o período desejado. A solicitação sai pronta para envio direto no WhatsApp com identificação automática.
               </p>
 
-              <div className="mt-6 rounded-[10px] border border-[#F3B51B]/50 bg-white/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#F3B51B]">
+              <div className="mt-6 rounded-[10px] border border-accent/50 bg-white/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent">
                   Equipamento selecionado
                 </p>
                 <p className="font-display text-2xl font-bold uppercase text-white mt-1">
                   {equipmentLabel}
                 </p>
                 {selectedEquipment && (
-                  <p className="text-xs text-[#D6D9DE] mt-0.5">
+                  <p className="text-xs text-line mt-0.5">
                     {selectedEquipment.brand} • Ref.: {selectedEquipment.code} • {selectedEquipment.billingUnit}
                   </p>
                 )}
@@ -191,32 +195,32 @@ export function QuoteSection({
             </div>
 
             <div className="space-y-4">
-              <div className="space-y-2.5 text-sm text-[#D6D9DE]">
+              <div className="space-y-2.5 text-sm text-line">
                 <a
-                  href={companyConfig.contact.phoneHref}
+                  href={company.contact.phoneHref}
                   onClick={() => trackEvent('phone_click', { location: 'quote_panel' })}
                   className="flex items-center gap-3 hover:text-white transition-colors min-h-[40px]"
                 >
-                  <Phone className="w-4 h-4 text-[#F3B51B] shrink-0" aria-hidden="true" />
-                  <span>{companyConfig.contact.phoneDisplay}</span>
+                  <Phone className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
+                  <span>{company.contact.phoneDisplay}</span>
                 </a>
 
                 <a
-                  href={`mailto:${companyConfig.contact.email}`}
+                  href={`mailto:${company.contact.email}`}
                   className="flex items-center gap-3 hover:text-white transition-colors min-h-[40px]"
                 >
-                  <Mail className="w-4 h-4 text-[#F3B51B] shrink-0" aria-hidden="true" />
-                  <span>{companyConfig.contact.email}</span>
+                  <Mail className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
+                  <span>{company.contact.email}</span>
                 </a>
 
                 <div className="flex items-center gap-3 min-h-[40px]">
-                  <MapPin className="w-4 h-4 text-[#F3B51B] shrink-0" aria-hidden="true" />
-                  <span>{companyConfig.contact.cityRegion}</span>
+                  <MapPin className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
+                  <span>{company.contact.cityRegion}</span>
                 </div>
 
                 <div className="flex items-center gap-3 min-h-[40px]">
-                  <Clock className="w-4 h-4 text-[#F3B51B] shrink-0" aria-hidden="true" />
-                  <span>{companyConfig.contact.businessHours}</span>
+                  <Clock className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
+                  <span>{company.contact.businessHours}</span>
                 </div>
               </div>
 
@@ -230,7 +234,7 @@ export function QuoteSection({
                     equipment_name: equipmentLabel,
                   })
                 }
-                className="min-h-[48px] w-full px-5 rounded-[10px] bg-[#F3B51B] hover:bg-[#E0A310] text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="min-h-[48px] w-full px-5 rounded-[10px] bg-accent hover:bg-accent-hover text-dark font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" aria-hidden="true" />
                 <span>Enviar solicitação via WhatsApp</span>
@@ -242,18 +246,18 @@ export function QuoteSection({
             {submittedMessage ? (
               <div className="h-full flex flex-col justify-between gap-6" role="status" aria-live="polite">
                 <div>
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#F3B51B] text-[#25272B] text-xs font-bold uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-accent text-dark text-xs font-bold uppercase tracking-wider">
                     <Check className="w-4 h-4" aria-hidden="true" />
                     Solicitação preparada com sucesso
                   </span>
-                  <h3 className="font-display text-3xl font-extrabold uppercase text-[#25272B] mt-4">
+                  <h3 className="font-display text-3xl font-extrabold uppercase text-dark mt-4">
                     MENSAGEM DE ORÇAMENTO GERADA
                   </h3>
-                  <p className="text-sm text-[#656B73] mt-2 leading-relaxed">
+                  <p className="text-sm text-muted mt-2 leading-relaxed">
                     Sua solicitação já inclui a identificação completa do equipamento selecionado. Envie pelo WhatsApp ou copie abaixo.
                   </p>
 
-                  <pre className="mt-5 p-4 rounded-[10px] bg-[#F2F3F5] border border-[#D6D9DE] text-xs sm:text-sm text-[#25272B] font-sans whitespace-pre-wrap leading-relaxed">
+                  <pre className="mt-5 p-4 rounded-[10px] bg-surface border border-line text-xs sm:text-sm text-dark font-sans whitespace-pre-wrap leading-relaxed">
                     {submittedMessage}
                   </pre>
                 </div>
@@ -261,7 +265,7 @@ export function QuoteSection({
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
                     href={buildWhatsAppUrl(
-                      companyConfig.contact.whatsappDigits,
+                      company.contact.whatsappDigits,
                       submittedMessage
                     )}
                     target="_blank"
@@ -272,7 +276,7 @@ export function QuoteSection({
                         equipment_name: equipmentLabel,
                       })
                     }
-                    className="flex-1 min-h-[48px] px-5 rounded-[10px] bg-[#F3B51B] hover:bg-[#E0A310] text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="flex-1 min-h-[48px] px-5 rounded-[10px] bg-accent hover:bg-accent-hover text-dark font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     <MessageSquare className="w-4 h-4" aria-hidden="true" />
                     <span>Enviar pelo WhatsApp</span>
@@ -281,7 +285,7 @@ export function QuoteSection({
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="min-h-[48px] px-5 rounded-[10px] border border-[#D6D9DE] hover:border-[#25272B] bg-white text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="min-h-[48px] px-5 rounded-[10px] border border-line hover:border-dark bg-white text-dark font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     {copied ? (
                       <>
@@ -299,7 +303,7 @@ export function QuoteSection({
                   <button
                     type="button"
                     onClick={() => setSubmittedMessage(null)}
-                    className="min-h-[48px] px-4 rounded-[10px] bg-[#F2F3F5] hover:bg-[#D6D9DE] text-[#25272B] font-medium text-sm cursor-pointer"
+                    className="min-h-[48px] px-4 rounded-[10px] bg-surface hover:bg-line text-dark font-medium text-sm cursor-pointer"
                   >
                     Editar
                   </button>
@@ -311,7 +315,7 @@ export function QuoteSection({
                   <div>
                     <label
                       htmlFor="quote-name"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                      className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                     >
                       Nome ou Empresa *
                     </label>
@@ -325,7 +329,7 @@ export function QuoteSection({
                         if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
                       }}
                       placeholder="Ex.: Construtora, profissional ou responsável"
-                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
+                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-line bg-white text-sm text-dark placeholder:text-muted/70 focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50"
                     />
                     {errors.name && (
                       <p className="text-xs font-medium text-red-700 mt-1" role="alert">
@@ -337,7 +341,7 @@ export function QuoteSection({
                   <div>
                     <label
                       htmlFor="quote-phone"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                      className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                     >
                       Telefone / WhatsApp *
                     </label>
@@ -353,7 +357,7 @@ export function QuoteSection({
                         if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
                       }}
                       placeholder="(11) 98765-4321"
-                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
+                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-line bg-white text-sm text-dark placeholder:text-muted/70 focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50"
                     />
                     {errors.phone && (
                       <p className="text-xs font-medium text-red-700 mt-1" role="alert">
@@ -367,7 +371,7 @@ export function QuoteSection({
                   <div>
                     <label
                       htmlFor="quote-equipment"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                      className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                     >
                       Equipamento Selecionado
                     </label>
@@ -375,7 +379,7 @@ export function QuoteSection({
                       id="quote-equipment"
                       value={selectedEquipmentId}
                       onChange={(e) => onChangeSelectedEquipment(e.target.value)}
-                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50 cursor-pointer"
+                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-line bg-white text-sm text-dark focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50 cursor-pointer"
                     >
                       <option value="">Indicar com suporte técnico</option>
                       <optgroup label="Equipamentos do Catálogo">
@@ -398,7 +402,7 @@ export function QuoteSection({
                   <div>
                     <label
                       htmlFor="quote-period"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                      className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                     >
                       Período de Locação
                     </label>
@@ -406,7 +410,7 @@ export function QuoteSection({
                       id="quote-period"
                       value={period}
                       onChange={(e) => setPeriod(e.target.value)}
-                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50 cursor-pointer"
+                      className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-line bg-white text-sm text-dark focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50 cursor-pointer"
                     >
                       {rentalPeriods.map((item) => (
                         <option key={item} value={item}>
@@ -420,7 +424,7 @@ export function QuoteSection({
                 <div>
                   <label
                     htmlFor="quote-city"
-                    className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                    className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                   >
                     Cidade / Bairro da Obra
                   </label>
@@ -430,14 +434,14 @@ export function QuoteSection({
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Informe cidade, bairro ou endereço de entrega"
-                    className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
+                    className="w-full min-h-[48px] px-3.5 rounded-[8px] border border-line bg-white text-sm text-dark placeholder:text-muted/70 focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="quote-notes"
-                    className="block text-xs font-semibold uppercase tracking-wider text-[#25272B] mb-1.5"
+                    className="block text-xs font-semibold uppercase tracking-wider text-dark mb-1.5"
                   >
                     Detalhes da Operação (Opcional)
                   </label>
@@ -447,15 +451,15 @@ export function QuoteSection({
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Ex.: voltagem 127V/220V, retirada na loja ou entrega, acessórios"
-                    className="w-full px-3.5 py-2.5 rounded-[8px] border border-[#D6D9DE] bg-white text-sm text-[#25272B] placeholder:text-[#656B73]/70 focus:outline-none focus:border-[#25272B] focus:ring-2 focus:ring-[#F3B51B]/50"
+                    className="w-full px-3.5 py-2.5 rounded-[8px] border border-line bg-white text-sm text-dark placeholder:text-muted/70 focus:outline-none focus:border-dark focus:ring-2 focus:ring-accent/50"
                   />
                 </div>
 
-                <div className="rounded-[8px] bg-[#F2F3F5] border border-[#D6D9DE] p-3.5">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#656B73]">
+                <div className="rounded-[8px] bg-surface border border-line p-3.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted">
                     Mensagem automática identificada
                   </p>
-                  <p className="text-xs text-[#25272B] mt-1 whitespace-pre-line leading-relaxed">
+                  <p className="text-xs text-dark mt-1 whitespace-pre-line leading-relaxed">
                     {liveMessage}
                   </p>
                 </div>
@@ -463,7 +467,7 @@ export function QuoteSection({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="min-h-[48px] w-full px-6 rounded-[10px] bg-[#25272B] hover:bg-[#F3B51B] text-white hover:text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-60"
+                  className="min-h-[48px] w-full px-6 rounded-[10px] bg-dark hover:bg-accent text-white hover:text-dark font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-60"
                 >
                   <Send className="w-4 h-4" aria-hidden="true" />
                   <span>

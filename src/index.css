@@ -1,13 +1,30 @@
 @import "tailwindcss";
 
-@theme {
-  --color-industrial-yellow: #F3B51B;
-  --color-industrial-yellow-hover: #E0A310;
-  --color-graphite: #25272B;
-  --color-light-surface: #F2F3F5;
-  --color-pure-white: #FFFFFF;
-  --color-medium-gray: #D6D9DE;
-  --color-muted-text: #656B73;
+:root {
+  --brand-accent: #F3B51B;
+  --brand-accent-hover: #E0A310;
+  --brand-dark: #25272B;
+  --brand-surface: #F2F3F5;
+  --brand-line: #D6D9DE;
+  --brand-muted: #656B73;
+}
+
+[data-client="moshia"] {
+  --brand-accent: #EA7736;
+  --brand-accent-hover: #D46222;
+  --brand-dark: #262421;
+  --brand-surface: #F5F4F2;
+  --brand-line: #DEDAD4;
+  --brand-muted: #625E58;
+}
+
+@theme inline {
+  --color-accent: var(--brand-accent);
+  --color-accent-hover: var(--brand-accent-hover);
+  --color-dark: var(--brand-dark);
+  --color-surface: var(--brand-surface);
+  --color-line: var(--brand-line);
+  --color-muted: var(--brand-muted);
 
   --font-display: "Barlow Condensed", system-ui, -apple-system, sans-serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
@@ -16,8 +33,8 @@
 @layer base {
   html {
     font-family: var(--font-sans);
-    color: var(--color-graphite);
-    background-color: var(--color-light-surface);
+    color: var(--brand-dark);
+    background-color: var(--brand-surface);
     scroll-behavior: smooth;
   }
 
@@ -26,7 +43,6 @@
   }
 }
 
-/* Sutil animacao de entrada respeitando prefers-reduced-motion */
 @keyframes fadeUpSubtle {
   from {
     opacity: 0;
@@ -55,4 +71,3 @@
     transition-duration: 0.01ms !important;
   }
 }
-

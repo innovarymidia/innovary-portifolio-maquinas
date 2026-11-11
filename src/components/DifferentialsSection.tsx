@@ -12,24 +12,24 @@ export function DifferentialsSection() {
   return (
     <section
       id="diferenciais"
-      className="scroll-mt-20 py-16 lg:py-24 bg-[#F2F3F5]"
+      className="scroll-mt-20 py-16 lg:py-24 bg-surface"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-12 gap-8 lg:gap-10 items-center">
           <div className="col-span-12 lg:col-span-5">
-            <span className="inline-flex items-center px-3 py-1 rounded-md bg-[#F3B51B] text-[#25272B] text-xs font-bold uppercase tracking-[0.12em]">
+            <span className="inline-flex items-center px-3 py-1 rounded-md bg-accent text-dark text-xs font-bold uppercase tracking-[0.12em]">
               {differentialsConfig.eyebrow}
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-[#25272B] leading-[0.95] tracking-tight mt-4">
+            <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-dark leading-[0.95] tracking-tight mt-4">
               {differentialsConfig.title}
             </h2>
-            <p className="text-sm sm:text-base text-[#656B73] leading-relaxed mt-4">
+            <p className="text-sm sm:text-base text-muted leading-relaxed mt-4">
               {differentialsConfig.description}
             </p>
             <div className="mt-6">
               <a
                 href="#orcamento"
-                className="min-h-[48px] px-6 rounded-[10px] bg-[#25272B] hover:bg-[#F3B51B] text-white hover:text-[#25272B] font-semibold text-sm inline-flex items-center gap-2 transition-colors cursor-pointer"
+                className="min-h-[48px] px-6 rounded-[10px] bg-dark hover:bg-accent text-white hover:text-dark font-semibold text-sm inline-flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <span>Falar com atendimento</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -38,18 +38,18 @@ export function DifferentialsSection() {
           </div>
 
           <div className="col-span-12 lg:col-span-7">
-            <div className="rounded-[12px] overflow-hidden border border-[#D6D9DE] bg-white">
+            <div className="rounded-[12px] overflow-hidden border border-line bg-white">
               <img
                 src={differentialsConfig.sceneImage}
                 alt={differentialsConfig.sceneImageAlt}
                 decoding="async"
                 className="w-full h-64 sm:h-80 lg:h-[340px] object-cover"
               />
-              <div className="bg-[#25272B] text-white px-5 py-3.5 flex items-center justify-between gap-4">
-                <span className="text-xs sm:text-sm font-medium text-[#F2F3F5]">
+              <div className="bg-dark text-white px-5 py-3.5 flex items-center justify-between gap-4">
+                <span className="text-xs sm:text-sm font-medium text-surface">
                   {differentialsConfig.sceneCaption}
                 </span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F3B51B] shrink-0" aria-hidden="true" />
+                <span className="w-2.5 h-2.5 rounded-full bg-accent shrink-0" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -61,15 +61,15 @@ export function DifferentialsSection() {
             return (
               <article
                 key={item.title}
-                className="col-span-12 sm:col-span-6 lg:col-span-3 bg-white border border-[#D6D9DE] rounded-[12px] p-6"
+                className="col-span-12 sm:col-span-6 lg:col-span-3 bg-white border border-line rounded-[12px] p-6"
               >
-                <div className="w-11 h-11 rounded-[10px] bg-[#F2F3F5] border border-[#D6D9DE] flex items-center justify-center text-[#25272B]">
+                <div className="w-11 h-11 rounded-[10px] bg-surface border border-line flex items-center justify-center text-dark">
                   <Icon className="w-5 h-5" aria-hidden="true" />
                 </div>
-                <h3 className="font-display text-2xl font-bold uppercase text-[#25272B] mt-4 leading-tight">
+                <h3 className="font-display text-2xl font-bold uppercase text-dark mt-4 leading-tight">
                   {item.title}
                 </h3>
-                <p className="text-sm text-[#656B73] leading-relaxed mt-2">
+                <p className="text-sm text-muted leading-relaxed mt-2">
                   {item.description}
                 </p>
               </article>

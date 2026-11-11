@@ -1,14 +1,18 @@
 import { MessageSquare } from 'lucide-react';
 import { equipmentCatalog } from '../config/catalog';
-import { companyConfig } from '../config/company';
+import type { CompanyConfig } from '../config/company';
 import { trackEvent } from '../lib/analytics';
 import { buildQuoteMessage, buildWhatsAppUrl } from '../lib/quote';
 
 interface FloatingWhatsAppProps {
+  company: CompanyConfig;
   selectedEquipmentId: string;
 }
 
-export function FloatingWhatsApp({ selectedEquipmentId }: FloatingWhatsAppProps) {
+export function FloatingWhatsApp({
+  company,
+  selectedEquipmentId,
+}: FloatingWhatsAppProps) {
   const selected = equipmentCatalog.find((item) => item.id === selectedEquipmentId);
   const message = selected
     ? buildQuoteMessage({
@@ -16,9 +20,9 @@ export function FloatingWhatsApp({ selectedEquipmentId }: FloatingWhatsAppProps)
         equipmentCode: selected.code,
         brand: selected.brand,
       })
-    : companyConfig.contact.whatsappDefaultMessage;
+    : company.contact.whatsappDefaultMessage;
 
-  const url = buildWhatsAppUrl(companyConfig.contact.whatsappDigits, message);
+  const url = buildWhatsAppUrl(company.contact.whatsappDigits, message);
 
   return (
     <a
@@ -32,9 +36,9 @@ export function FloatingWhatsApp({ selectedEquipmentId }: FloatingWhatsAppProps)
         })
       }
       aria-label="Solicitar orçamento via WhatsApp"
-      className="fixed bottom-5 right-5 z-40 min-h-[48px] px-4 sm:px-5 rounded-full bg-[#25272B] hover:bg-[#F3B51B] text-white hover:text-[#25272B] border border-[#D6D9DE]/30 shadow-sm inline-flex items-center gap-2.5 text-sm font-semibold transition-colors cursor-pointer"
+      className="fixed bottom-5 right-5 z-40 min-h-[48px] px-4 sm:px-5 rounded-full bg-dark hover:bg-accent text-white hover:text-dark border border-line/30 shadow-sm inline-flex items-center gap-2.5 text-sm font-semibold transition-colors cursor-pointer"
     >
-      <span className="w-7 h-7 rounded-full bg-[#F3B51B] text-[#25272B] flex items-center justify-center shrink-0">
+      <span className="w-7 h-7 rounded-full bg-accent text-dark flex items-center justify-center shrink-0">
         <MessageSquare className="w-4 h-4" aria-hidden="true" />
       </span>
       <span className="hidden sm:inline">Orçamento WhatsApp</span>

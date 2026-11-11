@@ -45,3 +45,4 @@ export function filterCatalogEquipments({
     return haystack.includes(query);
   });
 }
+

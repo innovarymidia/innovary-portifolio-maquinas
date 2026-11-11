@@ -1,16 +1,20 @@
 import { ArrowRight } from 'lucide-react';
 import { categoryLibrary, type CategoryId } from '../config/catalog';
 import { categoriesSectionConfig } from '../config/sections';
-import { templateConfig } from '../config/template';
+import type { TemplateConfig } from '../config/template';
 import { trackEvent } from '../lib/analytics';
 
 interface CategoriesSectionProps {
+  template: TemplateConfig;
   onSelectCategory: (categoryId: CategoryId) => void;
 }
 
-export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) {
+export function CategoriesSection({
+  template,
+  onSelectCategory,
+}: CategoriesSectionProps) {
   const visibleCategories = categoryLibrary.filter((cat) =>
-    templateConfig.enabledCategoryIds.includes(cat.id)
+    template.enabledCategoryIds.includes(cat.id)
   );
 
   const handleSelect = (category: (typeof visibleCategories)[number]) => {
@@ -26,13 +30,13 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
   };
 
   return (
-    <section id="categorias" className="scroll-mt-20 py-16 lg:py-24 bg-[#F2F3F5]">
+    <section id="categorias" className="scroll-mt-20 py-16 lg:py-24 bg-surface">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto">
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-[#25272B] tracking-tight leading-[0.95]">
+          <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-dark tracking-tight leading-[0.95]">
             {categoriesSectionConfig.title}
           </h2>
-          <p className="text-sm sm:text-base text-[#656B73] mt-3 leading-relaxed">
+          <p className="text-sm sm:text-base text-muted mt-3 leading-relaxed">
             {categoriesSectionConfig.subtitle}
           </p>
         </div>
@@ -50,10 +54,10 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
               }}
               role="button"
               tabIndex={0}
-              className="col-span-12 sm:col-span-6 lg:col-span-3 bg-white border border-[#D6D9DE] hover:border-[#F3B51B] rounded-[12px] p-5 flex flex-col justify-between transition-colors duration-200 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F3B51B]"
+              className="col-span-12 sm:col-span-6 lg:col-span-3 bg-white border border-line hover:border-accent rounded-[12px] p-5 flex flex-col justify-between transition-colors duration-200 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <div>
-                <h3 className="font-display text-2xl font-bold uppercase text-[#25272B] text-center leading-[1.05] min-h-[48px] flex items-center justify-center">
+                <h3 className="font-display text-2xl font-bold uppercase text-dark text-center leading-[1.05] min-h-[48px] flex items-center justify-center">
                   {category.title}
                 </h3>
 
@@ -66,12 +70,12 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
                   />
                 </div>
 
-                <p className="text-xs text-[#656B73] text-center leading-relaxed mb-4">
+                <p className="text-xs text-muted text-center leading-relaxed mb-4">
                   {category.description}
                 </p>
               </div>
 
-              <span className="w-full min-h-[48px] px-3 rounded-[8px] bg-[#E8EAEE] group-hover:bg-[#F3B51B] text-[#25272B] font-semibold text-sm inline-flex items-center justify-center gap-1.5 transition-colors duration-200">
+              <span className="w-full min-h-[48px] px-3 rounded-[8px] bg-surface group-hover:bg-accent text-dark font-semibold text-sm inline-flex items-center justify-center gap-1.5 transition-colors duration-200">
                 <span>Ver linha</span>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </span>
