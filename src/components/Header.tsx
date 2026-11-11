@@ -19,7 +19,7 @@ export function Header({ company }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur-sm border-b border-line">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
         <BrandLogo company={company} />
 
         <nav className="hidden lg:flex items-center gap-6" aria-label="Navegação principal">

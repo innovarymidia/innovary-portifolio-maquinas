@@ -36,7 +36,7 @@ export function FloatingWhatsApp({
         })
       }
       aria-label="Solicitar orçamento via WhatsApp"
-      className="fixed bottom-5 right-5 z-40 min-h-[48px] px-4 sm:px-5 rounded-full bg-dark hover:bg-accent text-white hover:text-dark border border-line/30 shadow-sm inline-flex items-center gap-2.5 text-sm font-semibold transition-colors cursor-pointer"
+      className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-40 w-12 h-12 sm:w-auto sm:min-h-[48px] sm:px-5 rounded-full bg-dark hover:bg-accent text-white hover:text-dark border border-line/30 shadow-sm inline-flex items-center justify-center gap-2.5 text-sm font-semibold transition-colors cursor-pointer"
     >
       <span className="w-7 h-7 rounded-full bg-accent text-dark flex items-center justify-center shrink-0">
         <MessageSquare className="w-4 h-4" aria-hidden="true" />

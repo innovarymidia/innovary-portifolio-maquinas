@@ -11,7 +11,7 @@ export function BrandsSection({ company }: BrandsSectionProps) {
   }
 
   return (
-    <section id="marcas" className="scroll-mt-20 py-14 lg:py-20 bg-surface">
+    <section id="marcas" className="scroll-mt-16 sm:scroll-mt-20 py-12 sm:py-14 lg:py-20 bg-surface">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-muted">
@@ -25,16 +25,16 @@ export function BrandsSection({ company }: BrandsSectionProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3.5 mt-8">
+        <div className="flex flex-wrap justify-center lg:grid lg:grid-cols-7 gap-3 sm:gap-3.5 mt-7 sm:mt-8">
           {company.brands.map((brand) => (
             <div
               key={brand.name}
-              className="bg-white border border-line rounded-[12px] px-4 py-5 flex flex-col items-center justify-center text-center"
+              className="w-[calc(50%-6px)] sm:w-[calc(33.333%-10px)] lg:w-auto bg-white border border-line rounded-[12px] px-3 py-4 sm:px-4 sm:py-5 flex flex-col items-center justify-center text-center"
             >
-              <span className="font-display text-xl font-extrabold tracking-wide uppercase text-dark">
+              <span className="font-display text-lg sm:text-xl font-extrabold tracking-wide uppercase text-dark">
                 {brand.name}
               </span>
-              <span className="text-[11px] text-muted mt-1 leading-tight">
+              <span className="text-[11px] text-muted mt-0.5 sm:mt-1 leading-tight">
                 {brand.focus}
               </span>
             </div>

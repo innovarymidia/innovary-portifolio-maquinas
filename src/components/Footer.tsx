@@ -31,10 +31,10 @@ export function Footer({ company, template, onSelectCategory }: FooterProps) {
   };
 
   return (
-    <footer className="bg-dark text-surface pt-14 pb-8">
+    <footer className="bg-dark text-surface pt-12 sm:pt-14 pb-24 sm:pb-8">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-12 gap-8 lg:gap-10">
-          <div className="col-span-12 md:col-span-4 space-y-4">
+        <div className="grid grid-cols-12 gap-6 sm:gap-8 lg:gap-10">
+          <div className="col-span-12 md:col-span-4 min-w-0 space-y-4">
             <BrandLogo company={company} inverted />
             <p className="text-sm text-line leading-relaxed max-w-xs">
               {company.tagline}
@@ -45,7 +45,7 @@ export function Footer({ company, template, onSelectCategory }: FooterProps) {
             </div>
           </div>
 
-          <div className="col-span-6 md:col-span-2">
+          <div className="col-span-6 md:col-span-2 min-w-0">
             <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">
               Navegação
             </h3>
@@ -63,7 +63,7 @@ export function Footer({ company, template, onSelectCategory }: FooterProps) {
             </ul>
           </div>
 
-          <div className="col-span-6 md:col-span-3">
+          <div className="col-span-6 md:col-span-3 min-w-0">
             <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">
               Categorias
             </h3>
@@ -82,7 +82,7 @@ export function Footer({ company, template, onSelectCategory }: FooterProps) {
             </ul>
           </div>
 
-          <div className="col-span-12 md:col-span-3">
+          <div className="col-span-12 md:col-span-3 min-w-0">
             <h3 className="font-display text-lg font-bold uppercase tracking-wide text-white">
               Atendimento
             </h3>

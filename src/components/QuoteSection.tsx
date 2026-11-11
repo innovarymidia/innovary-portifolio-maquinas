@@ -163,27 +163,27 @@ export function QuoteSection({
   return (
     <section
       id="orcamento"
-      className="scroll-mt-20 py-16 lg:py-24 bg-white border-t border-line"
+      className="scroll-mt-16 sm:scroll-mt-20 py-12 sm:py-16 lg:py-24 bg-white border-t border-line"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
         <div className="bg-dark rounded-[12px] border border-dark overflow-hidden grid grid-cols-12">
-          <div className="col-span-12 lg:col-span-5 p-7 sm:p-10 text-white flex flex-col justify-between gap-8">
+          <div className="col-span-12 lg:col-span-5 p-5 sm:p-10 text-white flex flex-col justify-between gap-6 sm:gap-8">
             <div>
               <span className="inline-flex items-center px-3 py-1 rounded-md bg-accent text-dark text-xs font-bold uppercase tracking-[0.12em]">
                 ATENDIMENTO E ORÇAMENTO
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-extrabold uppercase text-white leading-[0.95] tracking-tight mt-4">
+              <h2 className="font-display text-3xl sm:text-5xl font-extrabold uppercase text-white leading-[0.95] tracking-tight mt-3 sm:mt-4">
                 ENCONTRE O EQUIPAMENTO CERTO PARA SEU PROJETO.
               </h2>
-              <p className="text-sm sm:text-base text-line leading-relaxed mt-3">
+              <p className="text-sm sm:text-base text-line leading-relaxed mt-2.5 sm:mt-3">
                 Informe o equipamento e o período desejado. A solicitação sai pronta para envio direto no WhatsApp com identificação automática.
               </p>
 
-              <div className="mt-6 rounded-[10px] border border-accent/50 bg-white/5 p-4">
+              <div className="mt-5 sm:mt-6 rounded-[10px] border border-accent/50 bg-white/5 p-3.5 sm:p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent">
                   Equipamento selecionado
                 </p>
-                <p className="font-display text-2xl font-bold uppercase text-white mt-1">
+                <p className="font-display text-xl sm:text-2xl font-bold uppercase text-white mt-1">
                   {equipmentLabel}
                 </p>
                 {selectedEquipment && (
@@ -194,12 +194,12 @@ export function QuoteSection({
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="space-y-2.5 text-sm text-line">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-2 text-xs sm:text-sm text-line">
                 <a
                   href={company.contact.phoneHref}
                   onClick={() => trackEvent('phone_click', { location: 'quote_panel' })}
-                  className="flex items-center gap-3 hover:text-white transition-colors min-h-[40px]"
+                  className="flex items-center gap-3 hover:text-white transition-colors min-h-[36px] sm:min-h-[40px]"
                 >
                   <Phone className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <span>{company.contact.phoneDisplay}</span>
@@ -207,18 +207,18 @@ export function QuoteSection({
 
                 <a
                   href={`mailto:${company.contact.email}`}
-                  className="flex items-center gap-3 hover:text-white transition-colors min-h-[40px]"
+                  className="flex items-center gap-3 hover:text-white transition-colors min-h-[36px] sm:min-h-[40px]"
                 >
                   <Mail className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <span>{company.contact.email}</span>
                 </a>
 
-                <div className="flex items-center gap-3 min-h-[40px]">
+                <div className="flex items-center gap-3 min-h-[36px] sm:min-h-[40px]">
                   <MapPin className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <span>{company.contact.cityRegion}</span>
                 </div>
 
-                <div className="flex items-center gap-3 min-h-[40px]">
+                <div className="flex items-center gap-3 min-h-[36px] sm:min-h-[40px]">
                   <Clock className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <span>{company.contact.businessHours}</span>
                 </div>
@@ -242,7 +242,7 @@ export function QuoteSection({
             </div>
           </div>
 
-          <div className="col-span-12 lg:col-span-7 bg-white p-6 sm:p-10 m-2 sm:m-3 rounded-[10px]">
+          <div className="col-span-12 lg:col-span-7 bg-white p-5 sm:p-10 m-0 lg:m-3 lg:rounded-[10px]">
             {submittedMessage ? (
               <div className="h-full flex flex-col justify-between gap-6" role="status" aria-live="polite">
                 <div>

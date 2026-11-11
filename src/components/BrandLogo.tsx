@@ -18,7 +18,7 @@ export function BrandLogo({ company, inverted = false }: BrandLogoProps) {
         <img
           src={company.logoSrc}
           alt={company.logoAlt ?? `${company.brandName} ${company.brandSubtitle}`}
-          className={inverted ? 'h-12 w-auto object-contain' : 'h-12 sm:h-14 w-auto object-contain'}
+          className={inverted ? 'h-11 w-auto object-contain' : 'h-10 sm:h-14 w-auto object-contain'}
         />
       </a>
     );
