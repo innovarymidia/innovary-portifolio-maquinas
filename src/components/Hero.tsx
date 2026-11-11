@@ -1,6 +1,7 @@
 import { ArrowRight, ChevronRight, ShieldCheck } from 'lucide-react';
 import { heroConfig } from '../config/sections';
 import { trackEvent } from '../lib/analytics';
+import { DustCloudEffect } from './DustCloudEffect';
 
 export function Hero() {
   return (
@@ -31,7 +32,10 @@ export function Hero() {
         <div className="hidden lg:block absolute inset-y-0 left-2/3 border-l border-[#D6D9DE]/50" />
       </div>
 
-      <div className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 animate-fade-up">
+      {/* Efeito sutil de poeira / nuvem de terra na head do site */}
+      <DustCloudEffect />
+
+      <div className="relative z-20 max-w-[1200px] mx-auto px-4 sm:px-6 animate-fade-up">
         {/* Linha superior da tipografia monumental */}
         <h1 className="font-display font-extrabold uppercase text-[#25272B] tracking-[-0.02em] leading-[0.88] text-[clamp(2.9rem,8.4vw,6.4rem)] select-none">
           <span className="block">{heroConfig.headlineTop}</span>
